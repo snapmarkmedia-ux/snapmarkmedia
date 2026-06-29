@@ -478,7 +478,6 @@ function CinematicHero() {
           </div>
         )}
       </CHAP>
-      </div>
 
       {/* ── Mobile Flow Container ─────────────────────────────────── */}
       <MobileHero parallax={parallax} />
