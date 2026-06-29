@@ -22,6 +22,69 @@ const {
   useCallback: useCHCb,
   useMemo: useCHMemo,
 } = React;
+
+function MobileHero({ parallax }) {
+  const { motion: m } = Motion;
+  const services = window.SERVICES_DATA || [];
+  const [idleAngle, setIdleAngle] = React.useState(0);
+  
+  React.useEffect(() => {
+    let last = performance.now();
+    let raf;
+    const tick = (now) => {
+      const dt = (now - last) / 1000;
+      last = now;
+      const speed = 360 / 85; 
+      setIdleAngle(prev => prev + speed * dt);
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, []);
+
+  return (
+    <div className="flex lg:hidden flex-col w-full min-h-screen relative z-10 pt-[10vh] overflow-hidden">
+      <Navbar />
+      
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <AmbientEffects parallax={parallax} />
+      </div>
+
+      <div className="flex h-[45vh] w-full items-center justify-center relative mb-4 z-10">
+         <LogoOrbit 
+           rotationAngle={0} 
+           idleAngle={idleAngle} 
+           activeIndex={-1} 
+           parallax={parallax}
+           compact={true}
+         />
+      </div>
+
+      <div className="flex flex-col items-center justify-center px-6 text-center mb-16 z-10">
+        <m.div className="liquid-glass flex items-center gap-2 rounded-full p-1 mb-4">
+          <span className="rounded-full bg-white px-3 py-1 font-body text-xs font-semibold text-black">Studio</span>
+          <span className="pr-3 font-body text-xs text-white/90 sm:text-sm">Premium Creative Studio</span>
+        </m.div>
+        
+        <h1 className="max-w-3xl font-heading text-5xl italic leading-[0.85] tracking-[-2px] text-white">
+          Snapmark Media
+        </h1>
+        <p className="mt-4 max-w-lg font-body text-sm font-light leading-relaxed text-white/80">
+          Transforming bold ideas into cinematic visuals. We craft premium video content, dynamic edits, and immersive designs that elevate your brand.
+        </p>
+      </div>
+
+      <div className="flex flex-col px-4 gap-8 pb-24 z-10">
+         {services.map((svc, idx) => (
+           <div key={idx} className="relative w-full">
+             <ServiceContent activeIndex={idx} />
+           </div>
+         ))}
+      </div>
+    </div>
+  );
+}
+
 const {
   motion: ch,
   useMotionValue: useCHMV,
@@ -166,12 +229,12 @@ function CinematicHero() {
         <IntroSequence onComplete={onIntroComplete} />
       )}
 
-      {/* ── Scroll container ─────────────────────────────────── */}
+      {/* ── Desktop Scroll container ─────────────────────────────────── */}
       <div
         ref={scrollRef}
         id="home"
         style={{ height: `${totalSections * 65}vh` }}
-        className="relative"
+        className="hidden lg:block relative"
       >
         {/* ── Sticky viewport ──────────────────────────────── */}
         <div className="sticky top-0 z-10 flex h-screen w-full flex-col overflow-hidden bg-transparent">
@@ -415,6 +478,10 @@ function CinematicHero() {
           </div>
         )}
       </CHAP>
+      </div>
+
+      {/* ── Mobile Flow Container ─────────────────────────────────── */}
+      <MobileHero parallax={parallax} />
     </>
   );
 }
