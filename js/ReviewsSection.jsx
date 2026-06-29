@@ -126,8 +126,8 @@ function ReviewsSection() {
             // Client Reviews
           </pm.p>
           <pm.h2
-            initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
-            whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.1 }}
             className="mt-4 font-heading text-4xl italic leading-tight tracking-[-1px] text-white sm:text-5xl md:text-6xl"

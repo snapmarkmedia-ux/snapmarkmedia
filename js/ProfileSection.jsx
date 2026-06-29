@@ -197,8 +197,8 @@ function PortraitCard() {
 
   return (
     <pm.div
-      initial={{ opacity: 0, scale: 0.7, rotateY: -30, rotateX: 20, rotateZ: -10, filter: "blur(20px)", x: 80 }}
-      whileInView={{ opacity: 1, scale: 1, rotateY: 0, rotateX: 0, rotateZ: 0, filter: "blur(0px)", x: 0 }}
+      initial={{ opacity: 0, scale: 0.7, rotateY: -30, rotateX: 20, rotateZ: -10, x: 80 }}
+      whileInView={{ opacity: 1, scale: 1, rotateY: 0, rotateX: 0, rotateZ: 0, x: 0 }}
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
       className="flex items-center justify-center"
@@ -314,8 +314,8 @@ function ProfileSection() {
 
             {/* Heading */}
             <pm.h2
-              initial={{ opacity: 0, y: 40, filter: "blur(12px)", scale: 0.95 }}
-              whileInView={{ opacity: 1, y: 0, filter: "blur(0px)", scale: 1 }}
+              initial={{ opacity: 0, y: 40, scale: 0.95 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.9, delay: 0.08, ease: "easeOut" }}
               className="font-heading text-5xl italic leading-[0.9] tracking-[-3px] text-white sm:text-6xl md:text-7xl lg:text-[5rem]"
@@ -328,8 +328,8 @@ function ProfileSection() {
 
             {/* Description */}
             <pm.p
-              initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
-              whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
               className="max-w-xl font-body text-sm font-light leading-relaxed text-white/75 md:text-base"

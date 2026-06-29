@@ -16,9 +16,9 @@ function ServiceContent({ activeIndex, onViewWorkHover, onViewWorkClick }) {
     <ServiceAP mode="wait">
       <svc.div
         key={active.id}
-        initial={{ opacity: 0, x: -30, filter: "blur(8px)" }}
-        animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-        exit={{ opacity: 0, x: 30, filter: "blur(8px)" }}
+        initial={{ opacity: 0, x: -30 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: 30 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
         className="liquid-glass-strong rounded-[1.5rem] p-6 md:p-8 border border-white/10 shadow-2xl max-w-xl flex flex-col"
         style={{

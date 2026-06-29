@@ -1,8 +1,8 @@
 const { motion } = Motion;
 
 const rise = {
-  initial: { filter: "blur(10px)", opacity: 0, y: 20 },
-  animate: { filter: "blur(0px)", opacity: 1, y: 0 }
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 }
 };
 
 function StatCard({ icon, value, label }) {

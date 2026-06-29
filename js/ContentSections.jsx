@@ -3,8 +3,8 @@ const { motion: sectionMotion } = Motion;
 const BACKGROUND_VIDEO = "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260418_094631_d30ab262-45ee-4b7d-99f3-5d5848c8ef13.mp4";
 
 const revealProps = {
-  initial: { filter: "blur(10px)", opacity: 0, y: 20 },
-  whileInView: { filter: "blur(0px)", opacity: 1, y: 0 },
+  initial: { opacity: 0, y: 20 },
+  whileInView: { opacity: 1, y: 0 },
   viewport: { once: true, amount: 0.1 },
   transition: { duration: 0.7, ease: "easeOut" }
 };
@@ -156,7 +156,7 @@ function GallerySection() {
   );
 }
 
-function FormField({ label, type = "text", multiline = false, select = false }) {
+function FormField({ label, type = "text", multiline = false, select = false, options = [] }) {
   const id = `field-${label.toLowerCase().replaceAll(" ", "-")}`;
   const classes = "w-full bg-transparent px-4 py-3 font-body text-sm text-white outline-none placeholder:text-white/45";
 
@@ -169,9 +169,9 @@ function FormField({ label, type = "text", multiline = false, select = false }) 
         ) : select ? (
           <select id={id} name={id} defaultValue="" className={classes}>
             <option value="" disabled className="bg-black">Select a service</option>
-            <option className="bg-black">Service placeholder 01</option>
-            <option className="bg-black">Service placeholder 02</option>
-            <option className="bg-black">Service placeholder 03</option>
+            {options.map((opt) => (
+              <option key={opt} value={opt} className="bg-black">{opt}</option>
+            ))}
           </select>
         ) : (
           <input id={id} name={id} type={type} placeholder={`${label} placeholder`} className={classes} />
@@ -261,7 +261,22 @@ function ContactSection() {
               <FormField label="Full Name" />
               <FormField label="Email" type="email" />
               <FormField label="Phone Number" type="tel" />
-              <FormField label="Service Required" select />
+              <FormField 
+                label="Service Required" 
+                select 
+                options={[
+                  "Reels Editing",
+                  "Shorts Editing",
+                  "Invitation Videos",
+                  "Invitation Cards",
+                  "YouTube Thumbnails",
+                  "Photo Editing",
+                  "Graphic Design",
+                  "Social Media Branding",
+                  "Color Grading",
+                  "Content Strategy"
+                ]} 
+              />
               <div className="md:col-span-2"><FormField label="Message" multiline /></div>
               <div className="md:col-span-2">
                 <button type="submit" className="liquid-glass-strong flex items-center gap-2 rounded-full px-5 py-2.5 font-body text-sm font-medium text-white">

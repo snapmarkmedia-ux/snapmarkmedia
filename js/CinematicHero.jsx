@@ -154,9 +154,9 @@ function CinematicHero() {
   }, [introComplete, activeIndex, isAssembled]);
 
   /* ── hero default content (before service scroll) ──────────── */
-  const rise = {
-    initial: { filter: "blur(10px)", opacity: 0, y: 20 },
-    animate: { filter: "blur(0px)", opacity: 1, y: 0 },
+  const ringReveal = {
+    initial: { opacity: 0, y: 20 },
+    animate: { opacity: 1, y: 0 },
   };
 
   return (
@@ -192,9 +192,9 @@ function CinematicHero() {
                   /* ── Hero default content ────────────────── */
                   <ch.div
                     key="hero-default"
-                    initial={{ opacity: 0, x: -20, filter: "blur(6px)" }}
-                    animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-                    exit={{ opacity: 0, x: -30, filter: "blur(8px)" }}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -30 }}
                     transition={{ duration: 0.55, ease: "easeOut" }}
                   >
                     <ch.div
@@ -217,8 +217,8 @@ function CinematicHero() {
                           {word.split("").map((letter, lIdx) => (
                             <ch.span
                               key={lIdx}
-                              initial={{ filter: "blur(8px)", opacity: 0, y: 35 }}
-                              animate={{ filter: "blur(0px)", opacity: 1, y: 0 }}
+                              initial={{ opacity: 0, y: 35 }}
+                              animate={{ opacity: 1, y: 0 }}
                               transition={{
                                 type: "spring",
                                 stiffness: 150,
@@ -300,9 +300,9 @@ function CinematicHero() {
                   /* ── Active service content ─────────────── */
                   <ch.div
                     key={`service-${activeIndex}`}
-                    initial={{ opacity: 0, x: -20, filter: "blur(6px)" }}
-                    animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-                    exit={{ opacity: 0, x: 30, filter: "blur(8px)" }}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 30 }}
                     transition={{ duration: 0.5, ease: "easeOut" }}
                   >
                     <ServiceContent
