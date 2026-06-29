@@ -57,6 +57,7 @@ function MobileHero({ parallax }) {
            activeIndex={-1} 
            parallax={parallax}
            compact={true}
+           mobileMode={true}
          />
       </div>
 

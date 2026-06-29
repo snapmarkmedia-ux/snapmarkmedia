@@ -51,6 +51,7 @@ function LogoOrbit({
   parallax,
   showRing = true,
   compact = false,
+  mobileMode = false,
   className = "",
 }) {
   const services = window.SERVICES_DATA;
@@ -162,7 +163,7 @@ function LogoOrbit({
         >
           {services.map((svc, i) => {
             const panelAngle = i * angleStep;
-            const isActive = i === activeIndex;
+            const isActive = mobileMode ? true : i === activeIndex;
             const grad = SERVICE_GRADIENTS[i] || SERVICE_GRADIENTS[0];
 
             const progress = assembleProgress;
@@ -219,6 +220,11 @@ function LogoOrbit({
                     viewBox="0 0 24 24"
                     style={{ width: compact ? 18 : 22, height: compact ? 18 : 22 }}
                     aria-hidden="true"
+                    fill={mobileMode ? "none" : `url(#${grad.id})`}
+                    stroke={mobileMode ? `url(#${grad.id})` : "none"}
+                    strokeWidth={mobileMode ? "2.5" : "0"}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                   >
                     <defs>
                       <linearGradient id={grad.id} x1="0%" y1="0%" x2="100%" y2="100%">
@@ -226,7 +232,7 @@ function LogoOrbit({
                         <stop offset="100%" stopColor={grad.to} />
                       </linearGradient>
                     </defs>
-                    <path d={SERVICE_ICONS[i] || SERVICE_ICONS[0]} fill={`url(#${grad.id})`} />
+                    <path d={mobileMode ? svc.icon : (SERVICE_ICONS[i] || SERVICE_ICONS[0])} />
                   </svg>
                   <span
                     className="mt-1.5 text-center font-body font-medium text-white/90"
