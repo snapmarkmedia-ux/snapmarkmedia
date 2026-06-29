@@ -163,7 +163,7 @@ function LogoOrbit({
         >
           {services.map((svc, i) => {
             const panelAngle = i * angleStep;
-            const isActive = mobileMode ? true : i === activeIndex;
+            const isActive = i === activeIndex;
             const grad = SERVICE_GRADIENTS[i] || SERVICE_GRADIENTS[0];
 
             const progress = assembleProgress;
