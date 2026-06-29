@@ -91,6 +91,32 @@ function MobileHero({ parallax, setMobileModalIndex, setViewWorkPersist }) {
         <p className="max-w-lg font-body text-sm font-light leading-relaxed text-white/80">
           Transforming bold ideas into cinematic visuals. We craft premium video content, dynamic edits, and immersive designs that elevate your brand.
         </p>
+
+        <div className="mt-8 flex flex-wrap items-stretch justify-center gap-3">
+          <div className="liquid-glass flex min-h-[90px] w-[calc(50%-6px)] sm:w-[130px] flex-col rounded-[1rem] p-4 text-left">
+            <ClockIcon />
+            <div className="mt-auto pt-3">
+              <div className="font-heading text-2xl italic leading-none tracking-[-1px] text-white">1+ Year</div>
+              <div className="mt-1 font-body text-[9px] font-light text-white/60">Experience</div>
+            </div>
+          </div>
+          <div className="liquid-glass flex min-h-[90px] w-[calc(50%-6px)] sm:w-[130px] flex-col rounded-[1rem] p-4 text-left">
+            <GlobeIcon />
+            <div className="mt-auto pt-3">
+              <div className="font-heading text-2xl italic leading-none tracking-[-1px] text-white">7+</div>
+              <div className="mt-1 font-body text-[9px] font-light text-white/60">Creative Partners</div>
+            </div>
+          </div>
+          <div className="liquid-glass flex min-h-[90px] w-[calc(50%-6px)] sm:w-[130px] flex-col rounded-[1rem] p-4 text-left">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className="h-7 w-7 text-white" aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5.586a1 1 0 0 1 .707.293l5.414 5.414a1 1 0 0 1 .293.707V19a2 2 0 0 1-2 2Z" />
+            </svg>
+            <div className="mt-auto pt-3">
+              <div className="font-heading text-2xl italic leading-none tracking-[-1px] text-white">100+</div>
+              <div className="mt-1 font-body text-[9px] font-light text-white/60">Projects Completed</div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className="flex flex-col px-4 gap-8 pb-24 z-10">

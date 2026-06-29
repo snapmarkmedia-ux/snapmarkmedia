@@ -220,11 +220,6 @@ function LogoOrbit({
                     viewBox="0 0 24 24"
                     style={{ width: compact ? 18 : 22, height: compact ? 18 : 22 }}
                     aria-hidden="true"
-                    fill={mobileMode ? "none" : `url(#${grad.id})`}
-                    stroke={mobileMode ? `url(#${grad.id})` : "none"}
-                    strokeWidth={mobileMode ? "2.5" : "0"}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
                   >
                     <defs>
                       <linearGradient id={grad.id} x1="0%" y1="0%" x2="100%" y2="100%">
@@ -232,7 +227,7 @@ function LogoOrbit({
                         <stop offset="100%" stopColor={grad.to} />
                       </linearGradient>
                     </defs>
-                    <path d={mobileMode ? svc.icon : (SERVICE_ICONS[i] || SERVICE_ICONS[0])} />
+                    <path d={SERVICE_ICONS[i] || SERVICE_ICONS[0]} fill={`url(#${grad.id})`} />
                   </svg>
                   <span
                     className="mt-1.5 text-center font-body font-medium text-white/90"
