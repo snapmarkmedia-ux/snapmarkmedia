@@ -211,7 +211,7 @@ function CinematicHero() {
                     </ch.div>
 
                     {/* Staggered interactive letter reveal */}
-                    <h1 className="mt-5 max-w-3xl font-heading text-5xl italic leading-[0.85] tracking-[-3px] sm:text-6xl md:text-7xl lg:text-[5.5rem] select-none flex flex-wrap gap-x-3">
+                    <h1 className="mt-5 max-w-3xl font-heading text-4xl italic leading-[0.85] tracking-[-2px] sm:text-6xl sm:tracking-[-3px] md:text-7xl lg:text-[5.5rem] select-none flex flex-wrap gap-x-3">
                       {"Snapmark Media".split(" ").map((word, wIdx) => (
                         <span key={wIdx} className="inline-flex overflow-hidden">
                           {word.split("").map((letter, lIdx) => (
@@ -271,21 +271,21 @@ function CinematicHero() {
                       transition={{ duration: 0.7, delay: introComplete ? 0.6 : 1.3, ease: "easeOut" }}
                       className="mt-8 flex flex-wrap items-stretch gap-3"
                     >
-                      <div className="liquid-glass flex min-h-[90px] w-[130px] flex-col rounded-[1rem] p-4 text-left">
+                      <div className="liquid-glass flex min-h-[90px] w-[calc(50%-6px)] sm:w-[130px] flex-col rounded-[1rem] p-4 text-left">
                         <ClockIcon />
                         <div className="mt-auto pt-3">
                           <div className="font-heading text-2xl italic leading-none tracking-[-1px] text-white">1+ Year</div>
                           <div className="mt-1 font-body text-[9px] font-light text-white/60">Experience</div>
                         </div>
                       </div>
-                      <div className="liquid-glass flex min-h-[90px] w-[130px] flex-col rounded-[1rem] p-4 text-left">
+                      <div className="liquid-glass flex min-h-[90px] w-[calc(50%-6px)] sm:w-[130px] flex-col rounded-[1rem] p-4 text-left">
                         <GlobeIcon />
                         <div className="mt-auto pt-3">
                           <div className="font-heading text-2xl italic leading-none tracking-[-1px] text-white">7+</div>
                           <div className="mt-1 font-body text-[9px] font-light text-white/60">Clients served</div>
                         </div>
                       </div>
-                      <div className="liquid-glass flex min-h-[90px] w-[130px] flex-col rounded-[1rem] p-4 text-left">
+                      <div className="liquid-glass flex min-h-[90px] w-[calc(50%-6px)] sm:w-[130px] flex-col rounded-[1rem] p-4 text-left">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className="h-7 w-7 text-white" aria-hidden="true">
                           <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5.586a1 1 0 0 1 .707.293l5.414 5.414a1 1 0 0 1 .293.707V19a2 2 0 0 1-2 2Z" />
                         </svg>

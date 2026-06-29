@@ -209,7 +209,7 @@ function PortraitCard() {
         animate={{ y: [0, -14, 0] }}
         transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
         className="relative"
-        style={{ width: 320, height: 390 }}
+        style={{ width: 'min(320px, 85vw)', height: 390 }}
       >
         {/* outer ambient glow blobs */}
         <div className="pointer-events-none absolute -inset-10 rounded-full"
@@ -454,7 +454,7 @@ function ProfileSection() {
           <p className="mx-auto mt-4 max-w-lg font-body text-sm font-light leading-relaxed text-white/65">
             {PROFILE.cta.description}
           </p>
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+          <div className="mt-8 flex flex-wrap justify-center gap-2 md:gap-3">
             <pm.a
               href={PROFILE.cta.primary.href}
               whileHover={{ scale: 1.05, y: -3, boxShadow: "0 0 30px rgba(139,92,246,0.5)" }}
@@ -476,7 +476,7 @@ function ProfileSection() {
               href={PROFILE.cta.secondary.href}
               whileHover={{ scale: 1.05, x: 5, color: "#d8b4fe" }}
               transition={{ duration: 0.2 }}
-              className="inline-flex items-center gap-2 font-body text-sm font-medium text-white/80 hover:text-white transition-colors duration-200"
+              className="liquid-glass flex items-center gap-2 rounded-full border border-white/5 px-2.5 py-1 md:px-3 md:py-1.5 transition-colors duration-300"
             >
               {PROFILE.cta.secondary.label}
               <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">

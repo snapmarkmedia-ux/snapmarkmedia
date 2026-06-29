@@ -27,7 +27,7 @@ function SectionHeading({ kicker, lineOne, lineTwo, description }) {
   return (
     <sectionMotion.header {...revealProps} className="max-w-3xl">
       <p className="mb-6 font-body text-sm text-white/80">// {kicker}</p>
-      <h2 className="font-heading text-6xl italic leading-[0.9] tracking-[-3px] text-white md:text-7xl lg:text-[6rem]">
+      <h2 className="font-heading text-4xl italic leading-[0.9] tracking-[-2px] text-white sm:text-6xl sm:tracking-[-3px] md:text-7xl lg:text-[6rem]">
         {lineOne}{lineTwo && <><br />{lineTwo}</>}
       </h2>
       {description && <p className="mt-6 max-w-xl font-body text-sm font-light leading-relaxed text-white/80 md:text-base">{description}</p>}

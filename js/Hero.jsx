@@ -7,7 +7,7 @@ const rise = {
 
 function StatCard({ icon, value, label }) {
   return (
-    <div className="liquid-glass flex min-h-[138px] w-[220px] flex-col rounded-[1.25rem] p-5 text-left">
+    <div className="liquid-glass flex min-h-[138px] w-full sm:w-[220px] flex-col rounded-[1.25rem] p-5 text-left">
       {icon}
       <div className="mt-auto pt-5">
         <div className="font-heading text-4xl italic leading-none tracking-[-1px] text-white">{value}</div>
@@ -39,7 +39,7 @@ function Hero() {
             Brief studio introduction placeholder. Add a concise statement about the ideas, stories, and visual experiences Snapmark Media creates.
           </motion.p>
 
-          <motion.div {...rise} transition={{ duration: 0.7, delay: 1.1, ease: "easeOut" }} className="mt-6 flex items-center gap-6">
+          <motion.div {...rise} transition={{ duration: 0.7, delay: 1.1, ease: "easeOut" }} className="mt-6 flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
             <a href="#services" className="liquid-glass-strong flex items-center gap-2 rounded-full px-5 py-2.5 font-body text-sm font-medium text-white">
               Primary Action <ArrowUpRight />
             </a>
@@ -48,7 +48,7 @@ function Hero() {
             </a>
           </motion.div>
 
-          <motion.div {...rise} transition={{ duration: 0.7, delay: 1.3, ease: "easeOut" }} className="mt-8 flex items-stretch gap-3 sm:gap-4">
+          <motion.div {...rise} transition={{ duration: 0.7, delay: 1.3, ease: "easeOut" }} className="mt-8 flex flex-col sm:flex-row items-stretch gap-3 sm:gap-4 w-full sm:w-auto px-4 sm:px-0">
             <StatCard icon={<ClockIcon />} value="00+" label="Projects delivered placeholder" />
             <StatCard icon={<GlobeIcon />} value="00+" label="Creative partners placeholder" />
           </motion.div>
