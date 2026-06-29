@@ -170,7 +170,7 @@ function CinematicHero() {
       <div
         ref={scrollRef}
         id="home"
-        style={{ height: `${totalSections * 100}vh` }}
+        style={{ height: `${totalSections * 65}vh` }}
         className="relative"
       >
         {/* ── Sticky viewport ──────────────────────────────── */}
