@@ -1,5 +1,5 @@
 function App() {
-  return <><CursorGlow /><CinematicHero /><ProfileSection /><ReviewsSection /><ContentSections /></>;
+  return <><DynamicWaveBackground /><CursorGlow /><CinematicHero /><ProfileSection /><ReviewsSection /><ContentSections /></>;
 }
 
 const originalError = console.error;

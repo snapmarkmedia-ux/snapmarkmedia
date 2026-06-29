@@ -100,7 +100,7 @@ function CinematicHero() {
   const [activeIndex, setActiveIndex] = useCHState(-1);
   useCHEffect(() => {
     const unsub = activeIndexRaw.on("change", (v) => {
-      const rounded = Math.round(v);
+      const rounded = Math.floor(v);
       setActiveIndex((prev) => (prev !== rounded ? rounded : prev));
     });
     return unsub;
