@@ -23,7 +23,7 @@ const {
   useMemo: useCHMemo,
 } = React;
 
-function MobileHero({ parallax }) {
+function MobileHero({ parallax, setMobileModalIndex, setViewWorkPersist }) {
   const { motion: m } = Motion;
   const services = window.SERVICES_DATA || [];
   const [idleAngle, setIdleAngle] = React.useState(0);
@@ -50,7 +50,33 @@ function MobileHero({ parallax }) {
         <AmbientEffects parallax={parallax} />
       </div>
 
-      <div className="flex h-[45vh] w-full items-center justify-center relative mb-4 z-10">
+      <div className="flex flex-col items-center justify-center px-6 text-center mb-8 z-10">
+        <m.div className="liquid-glass flex items-center gap-2 rounded-full p-1 mb-4">
+          <span className="rounded-full bg-white px-3 py-1 font-body text-xs font-semibold text-black">Studio</span>
+          <span className="pr-3 font-body text-xs text-white/90 sm:text-sm">Premium Creative Studio</span>
+        </m.div>
+        
+        <h1 className="max-w-3xl font-heading text-5xl italic leading-[0.85] tracking-[-2px] text-white select-none flex flex-wrap gap-x-3 justify-center">
+          {"Snapmark Media".split(" ").map((word, wIdx) => (
+            <span key={wIdx} className="inline-flex overflow-hidden">
+              {word.split("").map((letter, lIdx) => (
+                <m.span
+                  key={lIdx}
+                  className={`inline-block bg-clip-text text-transparent ${
+                    wIdx === 0 && lIdx >= 4
+                      ? "bg-gradient-to-b from-blue-400 via-blue-500 to-blue-600"
+                      : "bg-gradient-to-b from-white via-white to-white/70"
+                  }`}
+                >
+                  {letter}
+                </m.span>
+              ))}
+            </span>
+          ))}
+        </h1>
+      </div>
+
+      <div className="flex h-[45vh] w-full items-center justify-center relative mb-8 z-10">
          <LogoOrbit 
            rotationAngle={0} 
            idleAngle={idleAngle} 
@@ -62,15 +88,7 @@ function MobileHero({ parallax }) {
       </div>
 
       <div className="flex flex-col items-center justify-center px-6 text-center mb-16 z-10">
-        <m.div className="liquid-glass flex items-center gap-2 rounded-full p-1 mb-4">
-          <span className="rounded-full bg-white px-3 py-1 font-body text-xs font-semibold text-black">Studio</span>
-          <span className="pr-3 font-body text-xs text-white/90 sm:text-sm">Premium Creative Studio</span>
-        </m.div>
-        
-        <h1 className="max-w-3xl font-heading text-5xl italic leading-[0.85] tracking-[-2px] text-white">
-          Snapmark Media
-        </h1>
-        <p className="mt-4 max-w-lg font-body text-sm font-light leading-relaxed text-white/80">
+        <p className="max-w-lg font-body text-sm font-light leading-relaxed text-white/80">
           Transforming bold ideas into cinematic visuals. We craft premium video content, dynamic edits, and immersive designs that elevate your brand.
         </p>
       </div>
@@ -78,7 +96,13 @@ function MobileHero({ parallax }) {
       <div className="flex flex-col px-4 gap-8 pb-24 z-10">
          {services.map((svc, idx) => (
            <div key={idx} className="relative w-full">
-             <ServiceContent activeIndex={idx} />
+             <ServiceContent 
+                activeIndex={idx} 
+                onViewWorkClick={() => {
+                  setMobileModalIndex(idx);
+                  setViewWorkPersist(true);
+                }}
+             />
            </div>
          ))}
       </div>
@@ -101,6 +125,9 @@ function CinematicHero() {
   const services = window.SERVICES_DATA;
   const count = services.length;
   const angleStep = 360 / count;
+
+  const [mobileModalIndex, setMobileModalIndex] = useCHState(0);
+  const currentImgIdx = activeIndex === -1 ? mobileModalIndex : activeIndex;
 
   /* ── intro state ───────────────────────────────────────────── */
   const introCompleteVal = (() => {
@@ -470,8 +497,8 @@ function CinematicHero() {
                   </button>
                 )}
                 <img
-                  src={activeIndex === 1 ? "assets/reels-making-work.jpg" : activeIndex === 4 ? "assets/thumbnail-work.jpg" : activeIndex === 2 ? "assets/invitations-work.jpg" : activeIndex === 3 ? "assets/invitation-videos-work.jpg" : "assets/reels-work.jpg"}
-                  alt={activeIndex === 1 ? "Reels & Shorts Making Work Showcase" : activeIndex === 4 ? "YouTube Thumbnails Work Showcase" : activeIndex === 2 ? "Wedding Invitation Cards Work Showcase" : activeIndex === 3 ? "Invitation Videos Work Showcase" : "Reels & Shorts Editing Work Showcase"}
+                  src={currentImgIdx === 1 ? "assets/reels-making-work.jpg" : currentImgIdx === 4 ? "assets/thumbnail-work.jpg" : currentImgIdx === 2 ? "assets/invitations-work.jpg" : currentImgIdx === 3 ? "assets/invitation-videos-work.jpg" : "assets/reels-work.jpg"}
+                  alt={currentImgIdx === 1 ? "Reels & Shorts Making Work Showcase" : currentImgIdx === 4 ? "YouTube Thumbnails Work Showcase" : currentImgIdx === 2 ? "Wedding Invitation Cards Work Showcase" : currentImgIdx === 3 ? "Invitation Videos Work Showcase" : "Reels & Shorts Editing Work Showcase"}
                   className="w-full h-full object-contain rounded-[1.25rem]"
                 />
               </div>
@@ -481,7 +508,7 @@ function CinematicHero() {
       </CHAP>
 
       {/* ── Mobile Flow Container ─────────────────────────────────── */}
-      <MobileHero parallax={parallax} />
+      <MobileHero parallax={parallax} setMobileModalIndex={setMobileModalIndex} setViewWorkPersist={setViewWorkPersist} />
     </>
   );
 }
