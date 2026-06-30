@@ -30,7 +30,7 @@ function CursorGlow() {
   }, []);
 
   return (
-    <glowMot.div
+    <motion.div
       className="fixed pointer-events-none rounded-full z-0 select-none opacity-30 blur-[90px]"
       style={{
         left: smoothX,
