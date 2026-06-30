@@ -5,6 +5,7 @@ import CursorGlow from './CursorGlow';
 import DynamicWaveBackground from './DynamicWaveBackground';
 import ProfileSection from './ProfileSection';
 import ReviewsSection from './ReviewsSection';
+import TestReviews from './TestReviews';
 
 
 
@@ -15,7 +16,7 @@ import ReviewsSection from './ReviewsSection';
 
 
 function App() {
-  return <><DynamicWaveBackground /><CursorGlow /><CinematicHero /><ProfileSection /><ReviewsSection /><ContentSections /></>;
+  return <><DynamicWaveBackground /><CursorGlow /><CinematicHero /><ProfileSection /><ReviewsSection /><ContentSections /><TestReviews /></>;
 }
 
 const originalError = console.error;
