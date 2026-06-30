@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import React, {   useMemo as useAmbientMemo   } from 'react';
 import * as Motion from 'framer-motion';
 import {   useTransform as useAmbientTx   } from 'framer-motion';

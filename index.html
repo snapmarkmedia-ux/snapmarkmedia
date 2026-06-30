@@ -10,6 +10,16 @@
   <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
 </head>
 <body>
+  <div id="error-boundary" style="display:none; background:#7f1d1d; color:#fca5a5; padding:20px; font-family:monospace; z-index:999999; position:fixed; top:0; left:0; right:0; max-height:50vh; overflow:auto; border-bottom: 4px solid #ef4444;">
+    <h2 style="font-weight:bold; margin-bottom:10px;">Fatal Javascript Error:</h2>
+    <pre id="error-msg" style="white-space:pre-wrap;"></pre>
+  </div>
+  <script>
+    window.addEventListener('error', function(e) {
+      document.getElementById('error-boundary').style.display = 'block';
+      document.getElementById('error-msg').innerText = e.message + '\n' + e.filename + ':' + e.lineno + '\n' + (e.error ? e.error.stack : '');
+    });
+  </script>
   <div class="global-background" aria-hidden="true"></div>
   <div id="root"></div>
   <script type="module" src="/src/main.jsx"></script>

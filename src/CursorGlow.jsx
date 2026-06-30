@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import React, {   useEffect as useGlowEffect   } from 'react';
 import * as Motion from 'framer-motion';
 import {   useMotionValue as useGlowMV, useSpring as useGlowSpring   } from 'framer-motion';

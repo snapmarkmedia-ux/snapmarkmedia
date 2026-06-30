@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import AmbientEffects from './AmbientEffects';
 import Hero from './Hero';
 import { PlayIcon } from './icons';

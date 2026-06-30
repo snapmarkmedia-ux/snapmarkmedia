@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import React, {  useState, useEffect, useRef, useMemo, useCallback  } from 'react';
 import BlurText from './BlurText';
 import FadingVideo from './FadingVideo';

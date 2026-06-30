@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import React, {   useEffect as useBlurEffect, useRef as useBlurRef, useState   } from 'react';
 import * as Motion from 'framer-motion';
 

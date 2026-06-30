@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import React, {   useEffect as useParallaxEffect, useCallback as useParallaxCb   } from 'react';
 import * as Motion from 'framer-motion';
 import {   useMotionValue as useParallaxMV, useSpring as useParallaxSpring   } from 'framer-motion';

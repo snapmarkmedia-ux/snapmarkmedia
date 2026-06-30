@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import SERVICES_DATA from './ServicesData';
 import * as Motion from 'framer-motion';
 
