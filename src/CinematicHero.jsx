@@ -24,6 +24,8 @@ import * as Motion from 'framer-motion';
 
 
 
+const ch = motion;
+
 /**
  * CinematicHero.jsx
  * Master orchestrator — ties IntroSequence, LogoOrbit, ServiceContent,
