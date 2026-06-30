@@ -1,24 +1,3 @@
-import { motion } from 'framer-motion';
-import SERVICES_DATA from './ServicesData';
-import useMouseParallax from './useMouseParallax';
-import * as Motion from 'framer-motion';
-
-
-
-
-/**
- * LogoOrbit.jsx
- * 3D rotating service ring around the SnapMark Media logo.
- *
- * Props
- * ─────
- * rotationAngle   MotionValue | number  current ring Y-rotation in degrees
- * activeIndex     number                which service is highlighted (-1 = none)
- * parallax        { x, y }             spring MotionValues from useMouseParallax
- * showRing        boolean              whether service panels are visible
- * compact         boolean              smaller sizing (for intro)
- * className       string               extra classes on outermost wrapper
- */
 import React, {  
   useRef as useOrbitRef,
   useEffect as useOrbitEffect,
@@ -27,9 +6,15 @@ import React, {
   } from 'react';
 
 import {  
+  motion,
   useTransform as useOrbitTx,
   useMotionValue as useOrbitMV,
   } from 'framer-motion';
+
+import SERVICES_DATA from './ServicesData';
+import useMouseParallax from './useMouseParallax';
+
+const orb = motion;
 
 /* ── service icons (simple SVG paths from Material Symbols) ── */
 const SERVICE_ICONS = [
