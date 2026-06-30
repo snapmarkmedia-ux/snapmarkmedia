@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import AmbientEffects from './AmbientEffects';
-import Hero from './Hero';
+import Hero, { rise } from './Hero';
 import { PlayIcon } from './icons';
 import { ClockIcon } from './icons';
 import { GlobeIcon } from './icons';

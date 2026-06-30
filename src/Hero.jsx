@@ -21,7 +21,7 @@ import * as Motion from 'framer-motion';
 
 
 
-const rise = {
+export const rise = {
   initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 }
 };
