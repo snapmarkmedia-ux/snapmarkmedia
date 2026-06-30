@@ -36,6 +36,8 @@ const SERVICE_GRADIENTS_INTRO = [
   { id: "intro-grad-6", from: "#60a5fa", to: "#c084fc" },
 ];
 
+const intro = motion;
+
 function IntroSequence({ onComplete }) {
   const services = SERVICES_DATA;
   const count = services.length;

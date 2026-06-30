@@ -20,6 +20,8 @@ import {   AnimatePresence as ServiceAP,  } from 'framer-motion';
 
 
 
+const svc = motion;
+
 function ServiceContent({ activeIndex, onViewWorkHover, onViewWorkClick }) {
   const services = SERVICES_DATA;
   const active = activeIndex >= 0 ? services[activeIndex] : null;

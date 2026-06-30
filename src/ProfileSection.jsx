@@ -18,6 +18,8 @@ import {
   AnimatePresence,
   } from 'framer-motion';
 /* ── Custom Animated Name ────────────────────────────────────── */
+const pm = motion;
+
 function AnimatedName({ name }) {
   return (
     <pm.span

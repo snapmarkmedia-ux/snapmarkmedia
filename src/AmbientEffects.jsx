@@ -13,6 +13,8 @@ import {   useTransform as useAmbientTx   } from 'framer-motion';
 
 
 
+const amb = motion;
+
 function AmbientEffects({ parallax }) {
   /* ── particles (generated once) ────────────────────────────── */
   const particles = useAmbientMemo(
