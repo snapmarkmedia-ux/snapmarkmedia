@@ -94,14 +94,29 @@ function LogoOrbit({
   const angleMV = isMotionVal ? rotationAngle : null;
   const angleNum = isMotionVal ? undefined : rotationAngle || 0;
 
-  /* build rotateY transform string (adding idleAngle separately to avoid spring jitter) */
   const idleAngleMV = idleAngle && typeof idleAngle.get === 'function'
     ? idleAngle
     : useOrbitMV(idleAngle || 0);
 
-  const ringRotateY = angleMV
-    ? useOrbitTx([angleMV, idleAngleMV], ([v, idle]) => v + idle)
-    : useOrbitTx(idleAngleMV, (idle) => angleNum + idle);
+  const ringRotateY = useOrbitMV(0);
+
+  useOrbitEffect(() => {
+    const update = () => {
+      const angle = angleMV ? angleMV.get() : (angleNum || 0);
+      const idle = idleAngleMV.get() || 0;
+      ringRotateY.set(angle + idle);
+    };
+
+    const unsubAngle = angleMV ? angleMV.on("change", update) : null;
+    const unsubIdle = idleAngleMV.on("change", update);
+
+    update();
+
+    return () => {
+      if (unsubAngle) unsubAngle();
+      if (unsubIdle) unsubIdle();
+    };
+  }, [angleMV, idleAngleMV, angleNum]);
 
   return (
     <div
