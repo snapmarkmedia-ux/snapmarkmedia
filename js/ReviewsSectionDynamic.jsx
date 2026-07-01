@@ -1,5 +1,5 @@
 /* ─────────────────────────────────────────────────────────────
-   ReviewsSection.jsx  —  Swipeable Testimonials
+   ReviewsSectionDynamic.jsx  —  Swipeable Testimonials
    Fetches approved reviews dynamically from Supabase database.
  ───────────────────────────────────────────────────────────────*/
 const { motion: pm } = Motion;
