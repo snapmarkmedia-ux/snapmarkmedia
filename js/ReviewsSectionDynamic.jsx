@@ -231,6 +231,18 @@ function ReviewsSection() {
             </pm.button>
           </div>
         )}
+
+        {/* Leave a Review Button */}
+        <div className="mt-16 flex justify-center">
+          <pm.a
+            href="leave-review.html"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="px-8 py-3 bg-white text-black font-semibold text-sm rounded-full shadow-[0_4px_20px_rgba(255,255,255,0.15)] hover:bg-white/90 transition-all duration-200 cursor-pointer"
+          >
+            Leave a Review
+          </pm.a>
+        </div>
       </div>
     </section>
   );
