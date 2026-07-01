@@ -88,3 +88,11 @@ CREATE POLICY "Allow admin delete reviews"
             WHERE public.admin_users.id = auth.uid()
         )
     );
+
+-- E. Allow public anonymous visitors to read APPROVED reviews only
+DROP POLICY IF EXISTS "Allow public read approved reviews" ON public.reviews;
+CREATE POLICY "Allow public read approved reviews" 
+    ON public.reviews 
+    FOR SELECT 
+    TO anon, authenticated
+    USING (status = 'Approved');
