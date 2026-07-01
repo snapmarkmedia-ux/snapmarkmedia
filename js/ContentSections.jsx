@@ -182,6 +182,72 @@ function FormField({ label, type = "text", multiline = false, select = false, op
 }
 
 function ContactSection() {
+  const [status, setStatus] = React.useState('idle'); // 'idle' | 'loading' | 'success' | 'error'
+  const [validationMsg, setValidationMsg] = React.useState('');
+  const [submitError, setSubmitError] = React.useState('');
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (status === 'loading') return;
+
+    setValidationMsg('');
+    setSubmitError('');
+
+    const fullNameEl = document.getElementById('field-full-name');
+    const emailEl = document.getElementById('field-email');
+    const phoneEl = document.getElementById('field-phone-number');
+    const serviceEl = document.getElementById('field-service-required');
+    const messageEl = document.getElementById('field-message');
+
+    const fullName = fullNameEl ? fullNameEl.value.trim() : '';
+    const email = emailEl ? emailEl.value.trim() : '';
+    const phone = phoneEl ? phoneEl.value.trim() : '';
+    const service = serviceEl ? serviceEl.value : '';
+    const message = messageEl ? messageEl.value.trim() : '';
+
+    // Validation
+    if (!fullName) {
+      setValidationMsg('Please enter your full name.');
+      return;
+    }
+    if (!email) {
+      setValidationMsg('Please enter your email address.');
+      return;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setValidationMsg('Please enter a valid email address.');
+      return;
+    }
+    if (!message) {
+      setValidationMsg('Please enter a message.');
+      return;
+    }
+
+    setStatus('loading');
+
+    try {
+      if (typeof window.submitContactForm !== 'function') {
+        throw new Error('Contact submission service is not loaded.');
+      }
+
+      await window.submitContactForm({ fullName, email, phone, service, message });
+      
+      // Reset form
+      if (fullNameEl) fullNameEl.value = '';
+      if (emailEl) emailEl.value = '';
+      if (phoneEl) phoneEl.value = '';
+      if (serviceEl) serviceEl.value = '';
+      if (messageEl) messageEl.value = '';
+
+      setStatus('success');
+    } catch (err) {
+      console.error(err);
+      setSubmitError('Something went wrong while sending your message. Please try again later.');
+      setStatus('error');
+    }
+  };
+
   const channels = [
     {
       label: "WhatsApp / Phone",
@@ -257,7 +323,7 @@ function ContactSection() {
           </GlassCard>
 
           <GlassCard>
-            <form onSubmit={(event) => event.preventDefault()} className="grid gap-5 md:grid-cols-2">
+            <form onSubmit={handleSubmit} className="grid gap-5 md:grid-cols-2">
               <FormField label="Full Name" />
               <FormField label="Email" type="email" />
               <FormField label="Phone Number" type="tel" />
@@ -278,9 +344,30 @@ function ContactSection() {
                 ]} 
               />
               <div className="md:col-span-2"><FormField label="Message" multiline /></div>
+              
+              {validationMsg && (
+                <div className="md:col-span-2 text-red-400 font-body text-sm bg-red-500/10 border border-red-500/20 rounded-[0.75rem] px-4 py-2.5">
+                  {validationMsg}
+                </div>
+              )}
+              {status === 'success' && (
+                <div className="md:col-span-2 text-emerald-400 font-body text-sm bg-emerald-500/10 border border-emerald-500/20 rounded-[0.75rem] px-4 py-2.5">
+                  Thank you! Your message has been received. We'll get back to you shortly.
+                </div>
+              )}
+              {status === 'error' && (
+                <div className="md:col-span-2 text-red-400 font-body text-sm bg-red-500/10 border border-red-500/20 rounded-[0.75rem] px-4 py-2.5">
+                  {submitError}
+                </div>
+              )}
+
               <div className="md:col-span-2">
-                <button type="submit" className="liquid-glass-strong flex items-center gap-2 rounded-full px-5 py-2.5 font-body text-sm font-medium text-white">
-                  Submit Enquiry <ArrowUpRight />
+                <button 
+                  type="submit" 
+                  disabled={status === 'loading'}
+                  className="liquid-glass-strong flex items-center gap-2 rounded-full px-5 py-2.5 font-body text-sm font-medium text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {status === 'loading' ? 'Sending...' : 'Submit Enquiry'} <ArrowUpRight />
                 </button>
               </div>
             </form>
