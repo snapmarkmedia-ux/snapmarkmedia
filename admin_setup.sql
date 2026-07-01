@@ -29,16 +29,16 @@ CREATE POLICY "Allow public read admin_users"
     TO anon, authenticated
     USING (true);
 
--- B. Allow authenticated users to insert their own admin profile 
+-- B. Allow both anon and authenticated users to insert their admin profile 
 -- ONLY IF the admin_users table is currently empty.
+-- (This supports signup flows regardless of whether Email Confirmation is enabled).
 DROP POLICY IF EXISTS "Allow admin insert if empty" ON public.admin_users;
 CREATE POLICY "Allow admin insert if empty" 
     ON public.admin_users 
     FOR INSERT 
-    TO authenticated 
+    TO anon, authenticated 
     WITH CHECK (
         (SELECT COUNT(*) FROM public.admin_users) = 0
-        AND id = auth.uid()
     );
 
 -- ==============================================================
@@ -95,7 +95,7 @@ CREATE POLICY "Allow admin delete"
 
 -- ==============================================================
 -- SECTION 5: CLEANUP LEGACY TRIGGERS
--- Drops the trigger and trigger functions on auth.users as requested.
+-- Drops any trigger and trigger functions on auth.users.
 -- ==============================================================
 DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
 DROP FUNCTION IF EXISTS public.handle_new_admin();
