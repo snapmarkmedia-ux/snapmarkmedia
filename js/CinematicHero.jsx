@@ -26,21 +26,25 @@ const {
 function MobileHero({ parallax, setMobileModalIndex, setViewWorkPersist }) {
   const { motion: m } = Motion;
   const services = window.SERVICES_DATA || [];
-  const [idleAngle, setIdleAngle] = React.useState(0);
+  // Use MotionValue to prevent 60 FPS React re-renders on mobile devices
+  const idleAngle = React.useMemo(() => Motion.useMotionValue ? Motion.useMotionValue(0) : null, []);
   
   React.useEffect(() => {
+    if (!idleAngle) return;
     let last = performance.now();
     let raf;
+    let currentIdle = 0;
     const tick = (now) => {
       const dt = (now - last) / 1000;
       last = now;
       const speed = 360 / 85; 
-      setIdleAngle(prev => prev + speed * dt);
+      currentIdle += speed * dt;
+      idleAngle.set(currentIdle);
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, []);
+  }, [idleAngle]);
 
   return (
     <div className="flex lg:hidden flex-col w-full min-h-screen relative z-10 pt-[10vh] overflow-hidden">
@@ -169,7 +173,7 @@ function CinematicHero() {
   const [viewWorkPersist, setViewWorkPersist] = useCHState(false);
   const showWorkModal = viewWorkHover || viewWorkPersist;
 
-  const [idleAngle, setIdleAngle] = useCHState(0);
+  const idleAngle = useCHMV(0);
   const [isAssembled, setIsAssembled] = useCHState(false);
 
   /* Start assembly delay when intro is done */
@@ -242,7 +246,7 @@ function CinematicHero() {
 
     let last = performance.now();
     let raf;
-    let currentIdle = idleAngle;
+    let currentIdle = idleAngle.get();
 
     const tick = (now) => {
       const dt = (now - last) / 1000;
@@ -252,15 +256,15 @@ function CinematicHero() {
         if (isAssembled) {
           const speed = 360 / 85; /* deg/s — one revolution per 85s */
           currentIdle += speed * dt;
-          setIdleAngle(currentIdle);
+          idleAngle.set(currentIdle);
         }
       } else {
         if (Math.abs(currentIdle) > 0.05) {
           currentIdle *= Math.exp(-6 * dt); // smooth decay to 0
-          setIdleAngle(currentIdle);
+          idleAngle.set(currentIdle);
         } else if (currentIdle !== 0) {
           currentIdle = 0;
-          setIdleAngle(0);
+          idleAngle.set(0);
         }
       }
       raf = requestAnimationFrame(tick);
