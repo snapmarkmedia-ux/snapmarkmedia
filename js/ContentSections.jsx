@@ -438,6 +438,8 @@ function Footer() {
           <div className="flex gap-4">
             <span>Privacy · Terms</span>
             <span>·</span>
+            <a href="leave-review.html" className="hover:text-white transition-colors duration-200">Leave a Review</a>
+            <span>·</span>
             <a href="admin-login.html" className="hover:text-white transition-colors duration-200">Admin Login</a>
           </div>
         </div>
