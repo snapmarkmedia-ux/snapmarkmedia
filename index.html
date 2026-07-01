@@ -17,7 +17,8 @@
       errDiv.style.fontFamily = 'monospace';
       errDiv.style.fontSize = '14px';
       errDiv.style.whiteSpace = 'pre-wrap';
-      errDiv.innerHTML = '<strong>Fatal Javascript Error:</strong><br>' + e.message + '<br>at ' + e.filename + ':' + e.lineno + ':' + e.colno;
+      const stack = e.error && e.error.stack ? e.error.stack : (e.message + '\nat ' + e.filename + ':' + e.lineno + ':' + e.colno);
+      errDiv.innerHTML = '<strong>Fatal Javascript Error:</strong><br>' + stack;
       document.body.appendChild(errDiv);
     });
   </script>
