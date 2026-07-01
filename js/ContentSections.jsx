@@ -414,21 +414,13 @@ function Footer() {
           <div>
             <p className="font-body text-xs font-medium uppercase tracking-[.18em] text-white/55">Connect</p>
             <p className="mt-4 font-body text-sm leading-relaxed text-white/85">
-              snapmarkmedia@gmail.com<br />
-              9307133407
+              <a href="mailto:snapmarkmedia@gmail.com" className="hover:text-white/60 transition-colors">snapmarkmedia@gmail.com</a><br />
+              <a href="https://wa.me/9307133407" target="_blank" rel="noopener noreferrer" className="hover:text-emerald-400 transition-colors">9307133407</a>
             </p>
-            <div className="mt-auto pt-6 flex items-center justify-between">
-              <span className="font-heading text-xl italic tracking-[-1px] text-white">
-                9307133407
-              </span>
-              <div className="flex gap-2">
-                <a href="tel:9307133407" className="liquid-glass rounded-full px-3 py-1.5 font-body text-[11px] text-white/90 hover:text-[#00f0ff] transition-colors duration-200">Call</a>
-                <a href="https://wa.me/9307133407" target="_blank" rel="noopener noreferrer" className="liquid-glass rounded-full px-3 py-1.5 font-body text-[11px] text-white/90 hover:text-emerald-400 transition-colors duration-200">WhatsApp</a>
-              </div>
-            </div>
-            <div className="mt-5 flex flex-wrap gap-2">
-              <a href="https://www.instagram.com/snapmarkmedia?igsh=MWVuNWxtM2hsamFvNQ==" target="_blank" rel="noopener noreferrer" className="liquid-glass rounded-full px-3 py-1.5 font-body text-[11px] text-white/90 hover:text-pink-400 transition-colors duration-200">Instagram</a>
+            <div className="mt-6 flex flex-wrap gap-2">
+              <a href="tel:9307133407" className="liquid-glass rounded-full px-3 py-1.5 font-body text-[11px] text-white/90 hover:text-[#00f0ff] transition-colors duration-200">Call</a>
               <a href="https://wa.me/9307133407" target="_blank" rel="noopener noreferrer" className="liquid-glass rounded-full px-3 py-1.5 font-body text-[11px] text-white/90 hover:text-emerald-400 transition-colors duration-200">WhatsApp</a>
+              <a href="https://www.instagram.com/snapmarkmedia?igsh=MWVuNWxtM2hsamFvNQ==" target="_blank" rel="noopener noreferrer" className="liquid-glass rounded-full px-3 py-1.5 font-body text-[11px] text-white/90 hover:text-pink-400 transition-colors duration-200">Instagram</a>
               <a href="https://youtube.com/@sandeshpatil_96k?si=huLSSt7WSk0vXboo" target="_blank" rel="noopener noreferrer" className="liquid-glass rounded-full px-3 py-1.5 font-body text-[11px] text-white/90 hover:text-red-500 transition-colors duration-200">YouTube</a>
             </div>
           </div>
