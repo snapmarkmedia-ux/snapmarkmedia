@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard — SnapMark Media</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            heading: ['Instrument Serif', 'serif'],
+            body: ['Barlow', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    body {
+      background: radial-gradient(circle at 50% 50%, #110e26 0%, #000000 100%);
+      color: #fff;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    .glow-orb {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.08) 0%, rgba(0,0,0,0) 70%);
+      filter: blur(50px);
+      z-index: 0;
+      pointer-events: none;
+    }
+    
+    .liquid-glass {
+      background: rgba(255, 255, 255, 0.02);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 
+        0 4px 20px 0 rgba(0, 0, 0, 0.2),
+        inset 0 1px 1px rgba(255, 255, 255, 0.08);
+      position: relative;
+      overflow: hidden;
+      border-radius: 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .status-select {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 9999px;
+      outline: none;
+      font-size: 0.75rem;
+      padding: 0.25rem 1.5rem 0.25rem 0.75rem;
+      color: #fff;
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 0.5rem center;
+      background-size: 1rem;
+    }
+    
+    .status-select:focus {
+      border-color: rgba(139, 92, 246, 0.5);
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(0,0,0,0.1);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.1);
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255,255,255,0.2);
+    }
+  </style>
+</head>
+<body class="font-body antialiased selection:bg-white selection:text-black">
+  <div class="glow-orb top-0 left-1/4"></div>
+
+  <!-- Header -->
+  <header class="relative z-10 border-b border-white/5 bg-black/40 backdrop-blur-md">
+    <div class="mx-auto max-w-[1440px] px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="h-8 w-8 rounded-full overflow-hidden border border-white/10 flex items-center justify-center bg-white/5">
+          <img src="assets/snapmark-logo.png" alt="SnapMark Media" class="h-6 w-6 object-contain">
+        </div>
+        <div>
+          <span class="font-heading text-xl italic tracking-tight text-white">Snapmark Media</span>
+          <span class="ml-2 text-[10px] uppercase tracking-wider text-purple-400 font-semibold px-2 py-0.5 bg-purple-500/10 border border-purple-500/20 rounded-full">Admin</span>
+        </div>
+      </div>
+      <button id="logout-btn" class="px-4 py-2 border border-white/10 rounded-full text-xs font-semibold hover:bg-white/5 hover:border-white/20 transition-all duration-200">
+        Sign Out
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="relative z-10 mx-auto max-w-[1440px] px-6 py-10 space-y-8">
+    
+    <!-- Stats Cards -->
+    <section class="grid gap-6 sm:grid-cols-3">
+      <div class="liquid-glass p-6 flex flex-col justify-between min-h-[120px]">
+        <span class="text-xs uppercase tracking-wider text-white/50">// Total Enquiries</span>
+        <span id="stat-total" class="font-heading text-6xl italic mt-2 text-white">0</span>
+      </div>
+      <div class="liquid-glass p-6 flex flex-col justify-between min-h-[120px]">
+        <span class="text-xs uppercase tracking-wider text-white/50">// Today's Enquiries</span>
+        <span id="stat-today" class="font-heading text-6xl italic mt-2 text-white">0</span>
+      </div>
+      <div class="liquid-glass p-6 flex flex-col justify-between min-h-[120px]">
+        <span class="text-xs uppercase tracking-wider text-white/50">// Total Messages</span>
+        <span id="stat-messages" class="font-heading text-6xl italic mt-2 text-purple-400">0</span>
+      </div>
+    </section>
+
+    <!-- Submissions Table Section -->
+    <section class="space-y-6">
+      <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <h2 class="font-heading text-4xl italic text-white">Contact Enquiries</h2>
+        
+        <!-- Controls -->
+        <div class="flex flex-wrap items-center gap-4">
+          <input type="text" id="search-input" placeholder="Search by name, email, phone..." class="bg-white/5 border border-white/10 rounded-full px-5 py-2 text-xs text-white focus:outline-none focus:border-purple-500/50 transition-colors duration-200 w-full sm:w-64">
+          
+          <select id="filter-status" class="bg-white/5 border border-white/10 rounded-full px-4 py-2 text-xs text-white focus:outline-none focus:border-purple-500/50 cursor-pointer min-w-[120px]">
+            <option value="all" class="bg-black text-white">All Statuses</option>
+            <option value="new" class="bg-black text-white">New</option>
+            <option value="contacted" class="bg-black text-white">Contacted</option>
+            <option value="in progress" class="bg-black text-white">In Progress</option>
+            <option value="completed" class="bg-black text-white">Completed</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Table Wrapper -->
+      <div class="liquid-glass overflow-hidden">
+        <div class="overflow-x-auto w-full">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="border-b border-white/5 bg-white/[0.01]">
+                <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-white/50">Name</th>
+                <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-white/50">Email</th>
+                <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-white/50">Phone</th>
+                <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-white/50">Service</th>
+                <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-white/50">Message</th>
+                <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-white/50">Date</th>
+                <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-white/50">Status</th>
+                <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-white/50 text-right">Action</th>
+              </tr>
+            </thead>
+            <tbody id="table-body" class="divide-y divide-white/5">
+              <!-- Dynamically populated -->
+              <tr>
+                <td colspan="8" class="text-center py-12 text-white/40 text-sm">Loading enquiries...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Delete Confirmation Modal -->
+  <div id="delete-modal" class="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/60 backdrop-blur-sm hidden">
+    <div class="liquid-glass max-w-sm w-full p-6 text-center">
+      <h3 class="font-heading text-3xl italic text-white mb-2">Delete Enquiry</h3>
+      <p class="text-white/60 text-sm mb-6">Are you sure you want to permanently delete this submission? This action cannot be undone.</p>
+      <div class="flex gap-4">
+        <button id="cancel-delete-btn" class="flex-1 py-2.5 border border-white/10 rounded-full text-xs font-semibold hover:bg-white/5 transition-all duration-200">
+          Cancel
+        </button>
+        <button id="confirm-delete-btn" class="flex-1 py-2.5 bg-red-600 text-white rounded-full text-xs font-semibold hover:bg-red-500 transition-all duration-200">
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Supabase & Custom SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/admin.js"></script>
+
+  <script>
+    let submissions = [];
+    let deleteTargetId = null;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Guard Route: Verify Session
+      const session = await window.adminService.getCurrentSession();
+      if (!session) {
+        window.location.href = 'admin-login.html';
+        return;
+      }
+
+      // Logout handler
+      document.getElementById('logout-btn').addEventListener('click', async () => {
+        await window.adminService.signOutAdmin();
+        window.location.href = 'admin-login.html';
+      });
+
+      // Fetch and render initial data
+      await refreshData();
+
+      // Setup filters and search listeners
+      document.getElementById('search-input').addEventListener('input', renderTable);
+      document.getElementById('filter-status').addEventListener('change', renderTable);
+
+      // Modal action handlers
+      document.getElementById('cancel-delete-btn').addEventListener('click', () => {
+        document.getElementById('delete-modal').classList.add('hidden');
+        deleteTargetId = null;
+      });
+
+      document.getElementById('confirm-delete-btn').addEventListener('click', async () => {
+        if (deleteTargetId) {
+          try {
+            await window.adminService.deleteSubmission(deleteTargetId);
+            document.getElementById('delete-modal').classList.add('hidden');
+            deleteTargetId = null;
+            await refreshData();
+          } catch (err) {
+            console.error('Delete failed:', err);
+            alert('Failed to delete submission: ' + err.message);
+          }
+        }
+      });
+    });
+
+    async function refreshData() {
+      try {
+        submissions = await window.adminService.fetchSubmissions();
+        updateStats();
+        renderTable();
+      } catch (err) {
+        console.error('Error fetching submissions:', err);
+        const tbody = document.getElementById('table-body');
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="8" class="text-center py-12 text-red-400 text-sm">
+              Failed to load enquiries. Please check your network and try again.
+            </td>
+          </tr>
+        `;
+      }
+    }
+
+    function updateStats() {
+      const total = submissions.length;
+      
+      // Calculate today's entries
+      const todayStr = new Date().toDateString();
+      const todayCount = submissions.filter(item => {
+        return new Date(item.created_at).toDateString() === todayStr;
+      }).length;
+
+      // Messages count
+      const messagesCount = total;
+
+      document.getElementById('stat-total').innerText = total;
+      document.getElementById('stat-today').innerText = todayCount;
+      document.getElementById('stat-messages').innerText = messagesCount;
+    }
+
+    function renderTable() {
+      const searchQuery = document.getElementById('search-input').value.toLowerCase().trim();
+      const statusFilter = document.getElementById('filter-status').value;
+      const tbody = document.getElementById('table-body');
+
+      // Filtered submissions
+      const filtered = submissions.filter(item => {
+        // Status filter
+        if (statusFilter !== 'all' && item.status.toLowerCase() !== statusFilter) {
+          return false;
+        }
+
+        // Search query
+        if (searchQuery) {
+          const name = (item.full_name || '').toLowerCase();
+          const email = (item.email || '').toLowerCase();
+          const phone = (item.phone || '').toLowerCase();
+          const message = (item.message || '').toLowerCase();
+          
+          return name.includes(searchQuery) || 
+                 email.includes(searchQuery) || 
+                 phone.includes(searchQuery) ||
+                 message.includes(searchQuery);
+        }
+
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="8" class="text-center py-12 text-white/40 text-sm">No enquiries found.</td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(item => {
+        const formattedDate = new Date(item.created_at).toLocaleDateString(undefined, {
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+
+        // Determine badge style or text for status dropdown
+        const statusVal = (item.status || 'new').toLowerCase();
+
+        return `
+          <tr class="hover:bg-white/[0.01] transition-colors duration-150">
+            <td class="px-6 py-4 text-sm font-semibold text-white whitespace-nowrap">${escapeHTML(item.full_name)}</td>
+            <td class="px-6 py-4 text-sm text-white/70 whitespace-nowrap">${escapeHTML(item.email)}</td>
+            <td class="px-6 py-4 text-sm text-white/70 whitespace-nowrap">${escapeHTML(item.phone || '—')}</td>
+            <td class="px-6 py-4 text-sm whitespace-nowrap">
+              <span class="px-2.5 py-1 bg-white/5 border border-white/10 rounded-full text-xs text-white/80">${escapeHTML(item.service || '—')}</span>
+            </td>
+            <td class="px-6 py-4 text-sm text-white/60 max-w-xs truncate" title="${escapeHTML(item.message)}">${escapeHTML(item.message)}</td>
+            <td class="px-6 py-4 text-xs text-white/40 whitespace-nowrap">${formattedDate}</td>
+            <td class="px-6 py-4 text-sm whitespace-nowrap">
+              <select onchange="handleStatusChange('${item.id}', this.value)" class="status-select">
+                <option value="new" ${statusVal === 'new' ? 'selected' : ''}>New</option>
+                <option value="contacted" ${statusVal === 'contacted' ? 'selected' : ''}>Contacted</option>
+                <option value="in progress" ${statusVal === 'in progress' ? 'selected' : ''}>In Progress</option>
+                <option value="completed" ${statusVal === 'completed' ? 'selected' : ''}>Completed</option>
+              </select>
+            </td>
+            <td class="px-6 py-4 text-sm text-right whitespace-nowrap">
+              <button onclick="confirmDelete('${item.id}')" class="text-red-400 hover:text-red-300 text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-red-500/10 border border-red-500/0 hover:border-red-500/20 transition-all duration-200">
+                Delete
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    async function handleStatusChange(id, newStatus) {
+      try {
+        await window.adminService.updateSubmissionStatus(id, newStatus);
+        // Update local memory data status
+        const item = submissions.find(item => item.id === id);
+        if (item) item.status = newStatus;
+        updateStats();
+      } catch (err) {
+        console.error('Failed to update status:', err);
+        alert('Failed to update status: ' + err.message);
+        await refreshData(); // Revert ui on error
+      }
+    }
+
+    function confirmDelete(id) {
+      deleteTargetId = id;
+      document.getElementById('delete-modal').classList.remove('hidden');
+    }
+
+    function escapeHTML(str) {
+      if (!str) return '';
+      return str.replace(/[&<>'"]/g, 
+        tag => ({
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          "'": '&#39;',
+          '"': '&quot;'
+        }[tag] || tag)
+      );
+    }
+  </script>
+</body>
+</html>

@@ -435,7 +435,11 @@ function Footer() {
         </div>
         <div className="mt-10 flex flex-col gap-2 border-t border-white/10 pt-5 font-body text-xs text-white/55 sm:flex-row sm:items-center sm:justify-between">
           <span>© 2026 Snapmark Media. All rights reserved.</span>
-          <span>Privacy · Terms</span>
+          <div className="flex gap-4">
+            <span>Privacy · Terms</span>
+            <span>·</span>
+            <a href="admin-login.html" className="hover:text-white transition-colors duration-200">Admin Login</a>
+          </div>
         </div>
       </sectionMotion.div>
     </footer>
