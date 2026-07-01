@@ -26,8 +26,13 @@ const {
 function MobileHero({ parallax, setMobileModalIndex, setViewWorkPersist }) {
   const { motion: m } = Motion;
   const services = window.SERVICES_DATA || [];
-  // Use MotionValue to prevent 60 FPS React re-renders on mobile devices
-  const idleAngle = React.useMemo(() => Motion.useMotionValue ? Motion.useMotionValue(0) : null, []);
+  
+  // Use React.useRef to hold the MotionValue safely
+  const idleAngleRef = React.useRef(null);
+  if (!idleAngleRef.current && Motion.useMotionValue) {
+    idleAngleRef.current = Motion.useMotionValue(0);
+  }
+  const idleAngle = idleAngleRef.current;
   
   React.useEffect(() => {
     if (!idleAngle) return;
@@ -44,7 +49,7 @@ function MobileHero({ parallax, setMobileModalIndex, setViewWorkPersist }) {
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [idleAngle]);
+  }, []);
 
   return (
     <div className="flex lg:hidden flex-col w-full min-h-screen relative z-10 pt-[10vh] overflow-hidden">
