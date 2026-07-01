@@ -27,15 +27,10 @@ function MobileHero({ parallax, setMobileModalIndex, setViewWorkPersist }) {
   const { motion: m } = Motion;
   const services = window.SERVICES_DATA || [];
   
-  // Use React.useRef to hold the MotionValue safely
-  const idleAngleRef = React.useRef(null);
-  if (!idleAngleRef.current && Motion.useMotionValue) {
-    idleAngleRef.current = Motion.useMotionValue(0);
-  }
-  const idleAngle = idleAngleRef.current;
+  // Call useMotionValue unconditionally at the top level of the component
+  const idleAngle = Motion.useMotionValue(0);
   
   React.useEffect(() => {
-    if (!idleAngle) return;
     let last = performance.now();
     let raf;
     let currentIdle = 0;
@@ -49,7 +44,7 @@ function MobileHero({ parallax, setMobileModalIndex, setViewWorkPersist }) {
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, []);
+  }, [idleAngle]);
 
   return (
     <div className="flex lg:hidden flex-col w-full min-h-screen relative z-10 pt-[10vh] overflow-hidden">
