@@ -31,18 +31,40 @@ async function checkAdminExists() {
   }
 }
 
-/**
- * Registers the very first administrator account.
- * @param {string} email 
- * @param {string} password 
- */
 async function signUpAdmin(email, password) {
+  // First, verify client-side that no admin exists
+  const exists = await checkAdminExists();
+  if (exists) {
+    throw new Error('Registration is permanently disabled. An administrator account already exists.');
+  }
+
+  // 1. Sign up the user in Supabase Auth
   const { data, error } = await supabaseClient.auth.signUp({
     email,
     password
   });
 
   if (error) throw error;
+
+  const user = data.user;
+  if (!user) {
+    throw new Error('Sign up succeeded but no user data was returned.');
+  }
+
+  // 2. Insert into the public.admin_users metadata table
+  const { error: insertError } = await supabaseClient
+    .from('admin_users')
+    .insert([
+      {
+        id: user.id,
+        email: user.email
+      }
+    ]);
+
+  if (insertError) {
+    throw insertError;
+  }
+
   return data;
 }
 

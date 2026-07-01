@@ -17,16 +17,29 @@ ALTER TABLE public.admin_users ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.contact_submissions ENABLE ROW LEVEL SECURITY;
 
 -- ==============================================================
--- SECTION 3: RLS POLICY FOR ADMIN_USERS
--- Allows anonymous frontend page visitors to query if an admin profile 
--- exists (needed to hide/show the "Setup Admin" signup option).
+-- SECTION 3: RLS POLICIES FOR ADMIN_USERS
 -- ==============================================================
+
+-- A. Allow anonymous frontend page visitors to query if an admin profile 
+-- exists (needed to hide/show the "Setup Admin" signup option).
 DROP POLICY IF EXISTS "Allow public read admin_users" ON public.admin_users;
 CREATE POLICY "Allow public read admin_users" 
     ON public.admin_users 
     FOR SELECT 
     TO anon, authenticated
     USING (true);
+
+-- B. Allow authenticated users to insert their own admin profile 
+-- ONLY IF the admin_users table is currently empty.
+DROP POLICY IF EXISTS "Allow admin insert if empty" ON public.admin_users;
+CREATE POLICY "Allow admin insert if empty" 
+    ON public.admin_users 
+    FOR INSERT 
+    TO authenticated 
+    WITH CHECK (
+        (SELECT COUNT(*) FROM public.admin_users) = 0
+        AND id = auth.uid()
+    );
 
 -- ==============================================================
 -- SECTION 4: RLS POLICIES FOR CONTACT_SUBMISSIONS
@@ -81,31 +94,8 @@ CREATE POLICY "Allow admin delete"
     );
 
 -- ==============================================================
--- SECTION 5: ONE-TIME ADMIN REGISTRATION TRIGGER
--- Enforces a strict one-admin limit. When a new user registers in Supabase Auth,
--- this database function automatically verifies if an admin already exists.
--- If an admin exists, it raises an exception, aborting the signup.
--- If no admin exists, it creates the profile.
+-- SECTION 5: CLEANUP LEGACY TRIGGERS
+-- Drops the trigger and trigger functions on auth.users as requested.
 -- ==============================================================
-CREATE OR REPLACE FUNCTION public.handle_new_admin()
-RETURNS TRIGGER AS $$
-BEGIN
-    -- Check if there is already at least one admin profile
-    IF (SELECT COUNT(*) FROM public.admin_users) >= 1 THEN
-        RAISE EXCEPTION 'Registration is permanently disabled. An administrator account already exists.';
-    END IF;
-
-    -- Store the admin user details in public.admin_users
-    INSERT INTO public.admin_users (id, email)
-    VALUES (new.id, new.email);
-    
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
-
--- Bind the function to run after insert on auth.users
 DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
-CREATE TRIGGER on_auth_user_created
-    AFTER INSERT ON auth.users
-    FOR EACH ROW
-    EXECUTE FUNCTION public.handle_new_admin();
+DROP FUNCTION IF EXISTS public.handle_new_admin();
