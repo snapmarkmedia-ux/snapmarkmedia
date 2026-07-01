@@ -157,7 +157,6 @@ function CinematicHero() {
   const angleStep = 360 / count;
 
   const [mobileModalIndex, setMobileModalIndex] = useCHState(0);
-  const currentImgIdx = activeIndex === -1 ? mobileModalIndex : activeIndex;
 
   /* ── intro state ───────────────────────────────────────────── */
   const introCompleteVal = (() => {
@@ -219,6 +218,7 @@ function CinematicHero() {
   );
 
   const [activeIndex, setActiveIndex] = useCHState(-1);
+  const currentImgIdx = activeIndex === -1 ? mobileModalIndex : activeIndex;
   useCHEffect(() => {
     const unsub = activeIndexRaw.on("change", (v) => {
       const rounded = Math.floor(v);
