@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS public.reviews (
     rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
     detailed_review TEXT NOT NULL,
     photo_url TEXT, -- Stores compressed base64 JPEG data URL or direct image URL
+    client_profession TEXT, -- Stores client profession/title
     status TEXT DEFAULT 'Pending' NOT NULL CHECK (status IN ('Pending', 'Approved', 'Rejected')),
     created_at TIMESTAMPTZ DEFAULT now() NOT NULL
 );

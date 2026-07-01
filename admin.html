@@ -279,10 +279,18 @@
       </div>
 
       <form id="edit-review-form" class="space-y-4">
-        <!-- Client Name -->
-        <div>
-          <label for="edit-client-name" class="block text-[10px] font-semibold text-white/50 mb-1.5 uppercase tracking-wider">Client Name</label>
-          <input type="text" id="edit-client-name" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-purple-500/50">
+        <!-- Name & Profession Grid -->
+        <div class="grid grid-cols-2 gap-4">
+          <!-- Client Name -->
+          <div>
+            <label for="edit-client-name" class="block text-[10px] font-semibold text-white/50 mb-1.5 uppercase tracking-wider">Client Name</label>
+            <input type="text" id="edit-client-name" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-purple-500/50">
+          </div>
+          <!-- Client Profession -->
+          <div>
+            <label for="edit-client-profession" class="block text-[10px] font-semibold text-white/50 mb-1.5 uppercase tracking-wider">Client Profession</label>
+            <input type="text" id="edit-client-profession" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-purple-500/50">
+          </div>
         </div>
 
         <div class="grid grid-cols-2 gap-4">
@@ -538,6 +546,7 @@
 
         const payload = {
           client_name: document.getElementById('edit-client-name').value.trim(),
+          client_profession: document.getElementById('edit-client-profession').value.trim(),
           service_used: document.getElementById('edit-service-used').value,
           rating: parseInt(document.getElementById('edit-star-rating').value),
           status: newStatus,
@@ -740,7 +749,10 @@
                   : `<span class="text-[8px] text-white/45">AV</span>`
                 }
               </div>
-              <span>${escapeHTML(item.client_name)}</span>
+              <div class="flex flex-col">
+                <span>${escapeHTML(item.client_name)}</span>
+                <span class="text-[10px] text-white/40">${escapeHTML(item.client_profession || '—')}</span>
+              </div>
             </td>
             <td class="px-6 py-4 text-sm text-white/70 whitespace-nowrap">${escapeHTML(item.service_used)}</td>
             <td class="px-6 py-4 text-sm text-yellow-400 whitespace-nowrap" title="${item.rating} Stars">${stars}</td>
@@ -795,6 +807,7 @@
       editCompressedPhotoBase64 = review.photo_url || '';
 
       document.getElementById('edit-client-name').value = review.client_name;
+      document.getElementById('edit-client-profession').value = review.client_profession || '';
       document.getElementById('edit-service-used').value = review.service_used;
       document.getElementById('edit-star-rating').value = review.rating.toString();
       document.getElementById('edit-review-status').value = review.status;
@@ -822,6 +835,7 @@
     function closeReviewModal() {
       document.getElementById('review-modal').classList.add('hidden');
       document.getElementById('edit-photo-file').value = '';
+      document.getElementById('edit-client-profession').value = '';
       currentEditReviewId = null;
       editCompressedPhotoBase64 = null;
     }

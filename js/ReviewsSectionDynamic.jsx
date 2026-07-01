@@ -4,7 +4,7 @@
  ───────────────────────────────────────────────────────────────*/
 const { motion: pm } = Motion;
 
-function TestimonialCard({ handleShuffle, testimonial, position, rating, photoUrl, author, serviceUsed }) {
+function TestimonialCard({ handleShuffle, testimonial, position, rating, photoUrl, author, serviceUsed, profession }) {
   const dragRef = React.useRef(0);
   const isFront = position === "front";
 
@@ -68,7 +68,7 @@ function TestimonialCard({ handleShuffle, testimonial, position, rating, photoUr
         <p className="text-center font-heading text-xl font-bold tracking-wide" style={{ background: "linear-gradient(90deg, #d8b4fe 0%, #60a5fa 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
           {author}
         </p>
-        <p className="mt-1 text-center font-body text-xs font-semibold uppercase tracking-widest text-white/40">Client</p>
+        <p className="mt-1 text-center font-body text-xs font-semibold uppercase tracking-widest text-white/40">{profession || "Client"}</p>
       </div>
     </pm.div>
   );
@@ -102,6 +102,7 @@ function ReviewsSection() {
         const mapped = data.map(item => ({
           id: item.id,
           author: item.client_name,
+          profession: item.client_profession,
           testimonial: item.detailed_review,
           rating: item.rating,
           serviceUsed: item.service_used,
@@ -191,6 +192,7 @@ function ReviewsSection() {
                   key={t.id}
                   id={t.id}
                   author={t.author}
+                  profession={t.profession}
                   testimonial={t.testimonial}
                   rating={t.rating}
                   serviceUsed={t.serviceUsed}
