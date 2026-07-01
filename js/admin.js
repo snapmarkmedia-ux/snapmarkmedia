@@ -142,6 +142,61 @@ async function deleteSubmission(id) {
   if (error) throw error;
 }
 
+/**
+ * Fetches all reviews.
+ * @returns {Promise<Array>}
+ */
+async function fetchReviews() {
+  const { data, error } = await supabaseClient
+    .from('reviews')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (error) throw error;
+  return data;
+}
+
+/**
+ * Updates the status of a review.
+ * @param {string} id 
+ * @param {string} status 
+ */
+async function updateReviewStatus(id, status) {
+  const { error } = await supabaseClient
+    .from('reviews')
+    .update({ status })
+    .eq('id', id);
+
+  if (error) throw error;
+}
+
+/**
+ * Updates an entire review (status, details, rating, photo).
+ * @param {string} id 
+ * @param {Object} payload 
+ */
+async function updateReview(id, payload) {
+  const { error } = await supabaseClient
+    .from('reviews')
+    .update(payload)
+    .eq('id', id);
+
+  if (error) throw error;
+}
+
+/**
+ * Deletes a review permanently.
+ * @param {string} id 
+ */
+async function deleteReview(id) {
+  const { error } = await supabaseClient
+    .from('reviews')
+    .delete()
+    .eq('id', id);
+
+  if (error) throw error;
+}
+
 // Bind to window for global access in script files
 window.adminService = {
   checkAdminExists,
@@ -151,5 +206,9 @@ window.adminService = {
   getCurrentSession,
   fetchSubmissions,
   updateSubmissionStatus,
-  deleteSubmission
+  deleteSubmission,
+  fetchReviews,
+  updateReviewStatus,
+  updateReview,
+  deleteReview
 };

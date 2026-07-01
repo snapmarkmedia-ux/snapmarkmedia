@@ -110,77 +110,151 @@
     </div>
   </header>
 
+  <!-- Navigation Tabs -->
+  <nav class="mx-auto max-w-[1440px] px-6 mt-8 relative z-10 flex gap-4">
+    <button id="tab-enquiries" class="px-5 py-2.5 rounded-full text-xs font-semibold bg-white text-black transition-all duration-200 cursor-pointer">
+      Contact Enquiries
+    </button>
+    <button id="tab-reviews" class="px-5 py-2.5 rounded-full text-xs font-semibold bg-white/5 border border-white/10 text-white/70 hover:text-white transition-all duration-200 cursor-pointer">
+      Reviews Management
+    </button>
+  </nav>
+
   <!-- Main Content -->
-  <main class="relative z-10 mx-auto max-w-[1440px] px-6 py-10 space-y-8">
+  <main class="relative z-10 mx-auto max-w-[1440px] px-6 py-8">
     
-    <!-- Stats Cards -->
-    <section class="grid gap-6 sm:grid-cols-3">
-      <div class="liquid-glass p-6 flex flex-col justify-between min-h-[120px]">
-        <span class="text-xs uppercase tracking-wider text-white/50">// Total Enquiries</span>
-        <span id="stat-total" class="font-heading text-6xl italic mt-2 text-white">0</span>
-      </div>
-      <div class="liquid-glass p-6 flex flex-col justify-between min-h-[120px]">
-        <span class="text-xs uppercase tracking-wider text-white/50">// Today's Enquiries</span>
-        <span id="stat-today" class="font-heading text-6xl italic mt-2 text-white">0</span>
-      </div>
-      <div class="liquid-glass p-6 flex flex-col justify-between min-h-[120px]">
-        <span class="text-xs uppercase tracking-wider text-white/50">// Total Messages</span>
-        <span id="stat-messages" class="font-heading text-6xl italic mt-2 text-purple-400">0</span>
-      </div>
-    </section>
+    <!-- PANEL 1: ENQUIRIES -->
+    <div id="panel-enquiries" class="space-y-8">
+      <!-- Stats Cards -->
+      <section class="grid gap-6 sm:grid-cols-3">
+        <div class="liquid-glass p-6 flex flex-col justify-between min-h-[120px]">
+          <span class="text-xs uppercase tracking-wider text-white/50">// Total Enquiries</span>
+          <span id="stat-total" class="font-heading text-6xl italic mt-2 text-white">0</span>
+        </div>
+        <div class="liquid-glass p-6 flex flex-col justify-between min-h-[120px]">
+          <span class="text-xs uppercase tracking-wider text-white/50">// Today's Enquiries</span>
+          <span id="stat-today" class="font-heading text-6xl italic mt-2 text-white">0</span>
+        </div>
+        <div class="liquid-glass p-6 flex flex-col justify-between min-h-[120px]">
+          <span class="text-xs uppercase tracking-wider text-white/50">// Total Messages</span>
+          <span id="stat-messages" class="font-heading text-6xl italic mt-2 text-purple-400">0</span>
+        </div>
+      </section>
 
-    <!-- Submissions Table Section -->
-    <section class="space-y-6">
-      <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <h2 class="font-heading text-4xl italic text-white">Contact Enquiries</h2>
-        
-        <!-- Controls -->
-        <div class="flex flex-wrap items-center gap-4">
-          <input type="text" id="search-input" placeholder="Search by name, email, phone..." class="bg-white/5 border border-white/10 rounded-full px-5 py-2 text-xs text-white focus:outline-none focus:border-purple-500/50 transition-colors duration-200 w-full sm:w-64">
+      <!-- Submissions Table Section -->
+      <section class="space-y-6">
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <h2 class="font-heading text-4xl italic text-white">Contact Enquiries</h2>
           
-          <select id="filter-status" class="bg-white/5 border border-white/10 rounded-full px-4 py-2 text-xs text-white focus:outline-none focus:border-purple-500/50 cursor-pointer min-w-[120px]">
-            <option value="all" class="bg-black text-white">All Statuses</option>
-            <option value="new" class="bg-black text-white">New</option>
-            <option value="contacted" class="bg-black text-white">Contacted</option>
-            <option value="in progress" class="bg-black text-white">In Progress</option>
-            <option value="completed" class="bg-black text-white">Completed</option>
-          </select>
+          <!-- Controls -->
+          <div class="flex flex-wrap items-center gap-4">
+            <input type="text" id="search-input" placeholder="Search by name, email, phone..." class="bg-white/5 border border-white/10 rounded-full px-5 py-2 text-xs text-white focus:outline-none focus:border-purple-500/50 transition-colors duration-200 w-full sm:w-64">
+            
+            <select id="filter-status" class="bg-white/5 border border-white/10 rounded-full px-4 py-2 text-xs text-white focus:outline-none focus:border-purple-500/50 cursor-pointer min-w-[120px]">
+              <option value="all" class="bg-black text-white">All Statuses</option>
+              <option value="new" class="bg-black text-white">New</option>
+              <option value="contacted" class="bg-black text-white">Contacted</option>
+              <option value="in progress" class="bg-black text-white">In Progress</option>
+              <option value="completed" class="bg-black text-white">Completed</option>
+            </select>
+          </div>
         </div>
-      </div>
 
-      <!-- Table Wrapper -->
-      <div class="liquid-glass overflow-hidden">
-        <div class="overflow-x-auto w-full">
-          <table class="w-full text-left border-collapse">
-            <thead>
-              <tr class="border-b border-white/5 bg-white/[0.01]">
-                <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-white/50">Name</th>
-                <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-white/50">Email</th>
-                <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-white/50">Phone</th>
-                <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-white/50">Service</th>
-                <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-white/50">Message</th>
-                <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-white/50">Date</th>
-                <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-white/50">Status</th>
-                <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-white/50 text-right">Action</th>
-              </tr>
-            </thead>
-            <tbody id="table-body" class="divide-y divide-white/5">
-              <!-- Dynamically populated -->
-              <tr>
-                <td colspan="8" class="text-center py-12 text-white/40 text-sm">Loading enquiries...</td>
-              </tr>
-            </tbody>
-          </table>
+        <!-- Table Wrapper -->
+        <div class="liquid-glass overflow-hidden">
+          <div class="overflow-x-auto w-full">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="border-b border-white/5 bg-white/[0.01]">
+                  <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-white/50">Name</th>
+                  <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-white/50">Email</th>
+                  <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-white/50">Phone</th>
+                  <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-white/50">Service</th>
+                  <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-white/50">Message</th>
+                  <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-white/50">Date</th>
+                  <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-white/50">Status</th>
+                  <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-white/50 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody id="table-body" class="divide-y divide-white/5">
+                <tr>
+                  <td colspan="8" class="text-center py-12 text-white/40 text-sm">Loading enquiries...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
+
+    <!-- PANEL 2: REVIEWS -->
+    <div id="panel-reviews" class="space-y-8 hidden">
+      <!-- Stats Cards -->
+      <section class="grid gap-6 sm:grid-cols-3">
+        <div class="liquid-glass p-6 flex flex-col justify-between min-h-[120px]">
+          <span class="text-xs uppercase tracking-wider text-white/50">// Total Reviews</span>
+          <span id="review-stat-total" class="font-heading text-6xl italic mt-2 text-white">0</span>
+        </div>
+        <div class="liquid-glass p-6 flex flex-col justify-between min-h-[120px]">
+          <span class="text-xs uppercase tracking-wider text-white/50">// Approved Reviews</span>
+          <span id="review-stat-approved" class="font-heading text-6xl italic mt-2 text-emerald-400">0</span>
+        </div>
+        <div class="liquid-glass p-6 flex flex-col justify-between min-h-[120px]">
+          <span class="text-xs uppercase tracking-wider text-white/50">// Pending Reviews</span>
+          <span id="review-stat-pending" class="font-heading text-6xl italic mt-2 text-amber-400">0</span>
+        </div>
+      </section>
+
+      <!-- Reviews Table Section -->
+      <section class="space-y-6">
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <h2 class="font-heading text-4xl italic text-white">Submitted Reviews</h2>
+          
+          <!-- Controls -->
+          <div class="flex flex-wrap items-center gap-4">
+            <input type="text" id="review-search-input" placeholder="Search by client name, review content..." class="bg-white/5 border border-white/10 rounded-full px-5 py-2 text-xs text-white focus:outline-none focus:border-purple-500/50 transition-colors duration-200 w-full sm:w-64">
+            
+            <select id="review-filter-status" class="bg-white/5 border border-white/10 rounded-full px-4 py-2 text-xs text-white focus:outline-none focus:border-purple-500/50 cursor-pointer min-w-[120px]">
+              <option value="all" class="bg-black text-white">All Statuses</option>
+              <option value="pending" class="bg-black text-white">Pending</option>
+              <option value="approved" class="bg-black text-white">Approved</option>
+              <option value="rejected" class="bg-black text-white">Rejected</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Table Wrapper -->
+        <div class="liquid-glass overflow-hidden">
+          <div class="overflow-x-auto w-full">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="border-b border-white/5 bg-white/[0.01]">
+                  <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-white/50">Client</th>
+                  <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-white/50">Service Used</th>
+                  <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-white/50">Rating</th>
+                  <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-white/50">Review</th>
+                  <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-white/50">Date</th>
+                  <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-white/50">Status</th>
+                  <th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-white/50 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="review-table-body" class="divide-y divide-white/5">
+                <tr>
+                  <td colspan="7" class="text-center py-12 text-white/40 text-sm">Loading reviews...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </div>
   </main>
 
   <!-- Delete Confirmation Modal -->
   <div id="delete-modal" class="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/60 backdrop-blur-sm hidden">
     <div class="liquid-glass max-w-sm w-full p-6 text-center">
-      <h3 class="font-heading text-3xl italic text-white mb-2">Delete Enquiry</h3>
-      <p class="text-white/60 text-sm mb-6">Are you sure you want to permanently delete this submission? This action cannot be undone.</p>
+      <h3 id="delete-modal-title" class="font-heading text-3xl italic text-white mb-2">Delete Enquiry</h3>
+      <p id="delete-modal-desc" class="text-white/60 text-sm mb-6">Are you sure you want to permanently delete this submission? This action cannot be undone.</p>
       <div class="flex gap-4">
         <button id="cancel-delete-btn" class="flex-1 py-2.5 border border-white/10 rounded-full text-xs font-semibold hover:bg-white/5 transition-all duration-200">
           Cancel
@@ -192,13 +266,120 @@
     </div>
   </div>
 
+  <!-- Edit Review Details Modal -->
+  <div id="review-modal" class="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/60 backdrop-blur-sm hidden">
+    <div class="liquid-glass max-w-lg w-full p-8 space-y-6 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-white/10 pb-4">
+        <h3 class="font-heading text-3xl italic text-white">Review Details</h3>
+        <button id="close-review-modal" class="text-white/40 hover:text-white transition-colors duration-200 cursor-pointer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-6 w-6">
+            <path d="M18 6 6 18M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <form id="edit-review-form" class="space-y-4">
+        <!-- Client Name -->
+        <div>
+          <label for="edit-client-name" class="block text-[10px] font-semibold text-white/50 mb-1.5 uppercase tracking-wider">Client Name</label>
+          <input type="text" id="edit-client-name" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-purple-500/50">
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <!-- Service Used -->
+          <div>
+            <label for="edit-service-used" class="block text-[10px] font-semibold text-white/50 mb-1.5 uppercase tracking-wider">Service Used</label>
+            <select id="edit-service-used" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-purple-500/50 cursor-pointer">
+              <option value="Video Editing">Video Editing</option>
+              <option value="Reels & Shorts Editing">Reels & Shorts Editing</option>
+              <option value="Motion Graphics">Motion Graphics</option>
+              <option value="Graphic Design">Graphic Design</option>
+              <option value="Social Media Management">Social Media Management</option>
+              <option value="Thumbnail Design">Thumbnail Design</option>
+              <option value="Photo Editing">Photo Editing</option>
+              <option value="Wedding Invitation Design">Wedding Invitation Design</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <!-- Star Rating -->
+          <div>
+            <label for="edit-star-rating" class="block text-[10px] font-semibold text-white/50 mb-1.5 uppercase tracking-wider">Rating</label>
+            <select id="edit-star-rating" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-purple-500/50 cursor-pointer">
+              <option value="1">1 Star</option>
+              <option value="2">2 Stars</option>
+              <option value="3">3 Stars</option>
+              <option value="4">4 Stars</option>
+              <option value="5">5 Stars</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Status -->
+        <div>
+          <label for="edit-review-status" class="block text-[10px] font-semibold text-white/50 mb-1.5 uppercase tracking-wider">Review Status</label>
+          <select id="edit-review-status" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-purple-500/50 cursor-pointer">
+            <option value="Pending">Pending</option>
+            <option value="Approved">Approved</option>
+            <option value="Rejected">Rejected</option>
+          </select>
+        </div>
+
+        <!-- Photo -->
+        <div>
+          <label class="block text-[10px] font-semibold text-white/50 mb-1.5 uppercase tracking-wider">Client Photo</label>
+          <div class="flex items-center gap-4">
+            <div class="h-14 w-14 rounded-full border border-white/10 bg-white/5 flex items-center justify-center overflow-hidden flex-shrink-0">
+              <img id="edit-photo-preview" src="" alt="Client Photo" class="h-full w-full object-cover hidden">
+              <div id="edit-photo-placeholder" class="h-full w-full flex items-center justify-center bg-white/5 text-white/30 text-[9px] uppercase">No Photo</div>
+            </div>
+            <div class="flex-grow">
+              <label for="edit-photo-file" class="inline-flex items-center justify-center px-3 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl font-semibold text-[10px] text-white/80 transition-colors duration-200 cursor-pointer">
+                Choose Photo
+              </label>
+              <input type="file" id="edit-photo-file" accept="image/*" class="hidden">
+              <button type="button" id="remove-photo-btn" class="ml-2 inline-flex items-center justify-center px-3 py-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 rounded-xl font-semibold text-[10px] text-red-400 transition-colors duration-200 hidden">
+                Remove Photo
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Detailed Review -->
+        <div>
+          <label for="edit-detailed-review" class="block text-[10px] font-semibold text-white/50 mb-1.5 uppercase tracking-wider">Review Content</label>
+          <textarea id="edit-detailed-review" required rows="4" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-purple-500/50 resize-none"></textarea>
+        </div>
+
+        <!-- Modal Actions -->
+        <div class="flex gap-4 pt-4 border-t border-white/10">
+          <button type="button" id="delete-review-btn" class="px-5 py-2.5 bg-red-600/20 hover:bg-red-600/30 border border-red-600/20 text-red-400 rounded-full text-xs font-semibold transition-all duration-200">
+            Delete Review
+          </button>
+          <div class="flex-grow"></div>
+          <button type="button" id="cancel-review-modal" class="px-5 py-2.5 border border-white/10 rounded-full text-xs font-semibold hover:bg-white/5 transition-all duration-200">
+            Cancel
+          </button>
+          <button type="submit" id="save-review-btn" class="px-6 py-2.5 bg-white text-black font-semibold text-xs rounded-full hover:bg-white/90 transition-all duration-200">
+            Save Changes
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- Supabase & Custom SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/admin.js"></script>
 
   <script>
     let submissions = [];
+    let reviews = [];
+    let deleteType = 'submission'; // 'submission' or 'review'
     let deleteTargetId = null;
+    let activeTab = 'enquiries'; // 'enquiries' or 'reviews'
+    let currentEditReviewId = null;
+    let editCompressedPhotoBase64 = null;
 
     document.addEventListener('DOMContentLoaded', async () => {
       // Guard Route: Verify Session
@@ -214,67 +395,185 @@
         window.location.href = 'admin-login.html';
       });
 
-      // Fetch and render initial data
-      await refreshData();
+      // Tab switcher logic
+      const tabEnquiries = document.getElementById('tab-enquiries');
+      const tabReviews = document.getElementById('tab-reviews');
+      const panelEnquiries = document.getElementById('panel-enquiries');
+      const panelReviews = document.getElementById('panel-reviews');
 
-      // Setup filters and search listeners
+      tabEnquiries.addEventListener('click', () => {
+        activeTab = 'enquiries';
+        tabEnquiries.className = "px-5 py-2.5 rounded-full text-xs font-semibold bg-white text-black transition-all duration-200 cursor-pointer";
+        tabReviews.className = "px-5 py-2.5 rounded-full text-xs font-semibold bg-white/5 border border-white/10 text-white/70 hover:text-white transition-all duration-200 cursor-pointer";
+        panelEnquiries.classList.remove('hidden');
+        panelReviews.classList.add('hidden');
+      });
+
+      tabReviews.addEventListener('click', () => {
+        activeTab = 'reviews';
+        tabReviews.className = "px-5 py-2.5 rounded-full text-xs font-semibold bg-white text-black transition-all duration-200 cursor-pointer";
+        tabEnquiries.className = "px-5 py-2.5 rounded-full text-xs font-semibold bg-white/5 border border-white/10 text-white/70 hover:text-white transition-all duration-200 cursor-pointer";
+        panelReviews.classList.remove('hidden');
+        panelEnquiries.classList.add('hidden');
+      });
+
+      // Fetch initial data
+      await Promise.all([refreshEnquiriesData(), refreshReviewsData()]);
+
+      // Enquiries controls listeners
       document.getElementById('search-input').addEventListener('input', renderTable);
       document.getElementById('filter-status').addEventListener('change', renderTable);
 
-      // Modal action handlers
+      // Reviews controls listeners
+      document.getElementById('review-search-input').addEventListener('input', renderReviewsTable);
+      document.getElementById('review-filter-status').addEventListener('change', renderReviewsTable);
+
+      // Delete confirmation modal actions
       document.getElementById('cancel-delete-btn').addEventListener('click', () => {
         document.getElementById('delete-modal').classList.add('hidden');
         deleteTargetId = null;
       });
 
       document.getElementById('confirm-delete-btn').addEventListener('click', async () => {
-        if (deleteTargetId) {
-          try {
+        if (!deleteTargetId) return;
+        
+        try {
+          if (deleteType === 'submission') {
             await window.adminService.deleteSubmission(deleteTargetId);
-            document.getElementById('delete-modal').classList.add('hidden');
-            deleteTargetId = null;
-            await refreshData();
-          } catch (err) {
-            console.error('Delete failed:', err);
-            alert('Failed to delete submission: ' + err.message);
+            await refreshEnquiriesData();
+          } else if (deleteType === 'review') {
+            await window.adminService.deleteReview(deleteTargetId);
+            document.getElementById('review-modal').classList.add('hidden');
+            await refreshReviewsData();
           }
+          document.getElementById('delete-modal').classList.add('hidden');
+          deleteTargetId = null;
+        } catch (err) {
+          console.error('Delete failed:', err);
+          alert('Delete failed: ' + err.message);
+        }
+      });
+
+      // Edit review modal actions
+      document.getElementById('close-review-modal').addEventListener('click', closeReviewModal);
+      document.getElementById('cancel-review-modal').addEventListener('click', closeReviewModal);
+      
+      document.getElementById('delete-review-btn').addEventListener('click', () => {
+        if (currentEditReviewId) {
+          confirmDeleteReview(currentEditReviewId);
+        }
+      });
+
+      // Review photo compression logic inside modal
+      const editPhotoFileInput = document.getElementById('edit-photo-file');
+      const editPhotoPreview = document.getElementById('edit-photo-preview');
+      const editPhotoPlaceholder = document.getElementById('edit-photo-placeholder');
+      const removePhotoBtn = document.getElementById('remove-photo-btn');
+
+      editPhotoFileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        if (file.size > 5 * 1024 * 1024) {
+          alert("Image file size exceeds 5MB. Please choose a smaller file.");
+          editPhotoFileInput.value = '';
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const maxDim = 256;
+            let w = img.width;
+            let h = img.height;
+
+            if (w > h) {
+              if (w > maxDim) {
+                h = Math.round(h * (maxDim / w));
+                w = maxDim;
+              }
+            } else {
+              if (h > maxDim) {
+                w = Math.round(w * (maxDim / h));
+                h = maxDim;
+              }
+            }
+
+            canvas.width = w;
+            canvas.height = h;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, w, h);
+
+            editCompressedPhotoBase64 = canvas.toDataURL('image/jpeg', 0.75);
+            editPhotoPreview.src = editCompressedPhotoBase64;
+            editPhotoPreview.classList.remove('hidden');
+            editPhotoPlaceholder.classList.add('hidden');
+            removePhotoBtn.classList.remove('hidden');
+          };
+          img.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+
+      removePhotoBtn.addEventListener('click', () => {
+        editCompressedPhotoBase64 = '';
+        editPhotoPreview.src = '';
+        editPhotoPreview.classList.add('hidden');
+        editPhotoPlaceholder.classList.remove('hidden');
+        removePhotoBtn.classList.add('hidden');
+        editPhotoFileInput.value = '';
+      });
+
+      // Submit edited review form
+      document.getElementById('edit-review-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!currentEditReviewId) return;
+
+        const payload = {
+          client_name: document.getElementById('edit-client-name').value.trim(),
+          service_used: document.getElementById('edit-service-used').value,
+          rating: parseInt(document.getElementById('edit-star-rating').value),
+          status: document.getElementById('edit-review-status').value,
+          detailed_review: document.getElementById('edit-detailed-review').value.trim(),
+          photo_url: editCompressedPhotoBase64
+        };
+
+        try {
+          await window.adminService.updateReview(currentEditReviewId, payload);
+          closeReviewModal();
+          await refreshReviewsData();
+        } catch (err) {
+          console.error('Failed to update review:', err);
+          alert('Failed to update review: ' + err.message);
         }
       });
     });
 
-    async function refreshData() {
+    // ── ENQUIRIES LOGIC ──
+    async function refreshEnquiriesData() {
       try {
         submissions = await window.adminService.fetchSubmissions();
-        updateStats();
+        updateEnquiriesStats();
         renderTable();
       } catch (err) {
         console.error('Error fetching submissions:', err);
-        const tbody = document.getElementById('table-body');
-        tbody.innerHTML = `
+        document.getElementById('table-body').innerHTML = `
           <tr>
-            <td colspan="8" class="text-center py-12 text-red-400 text-sm">
-              Failed to load enquiries. Please check your network and try again.
-            </td>
+            <td colspan="8" class="text-center py-12 text-red-400 text-sm">Failed to load enquiries.</td>
           </tr>
         `;
       }
     }
 
-    function updateStats() {
+    function updateEnquiriesStats() {
       const total = submissions.length;
-      
-      // Calculate today's entries
       const todayStr = new Date().toDateString();
-      const todayCount = submissions.filter(item => {
-        return new Date(item.created_at).toDateString() === todayStr;
-      }).length;
-
-      // Messages count
-      const messagesCount = total;
-
+      const todayCount = submissions.filter(item => new Date(item.created_at).toDateString() === todayStr).length;
       document.getElementById('stat-total').innerText = total;
       document.getElementById('stat-today').innerText = todayCount;
-      document.getElementById('stat-messages').innerText = messagesCount;
+      document.getElementById('stat-messages').innerText = total;
     }
 
     function renderTable() {
@@ -282,48 +581,27 @@
       const statusFilter = document.getElementById('filter-status').value;
       const tbody = document.getElementById('table-body');
 
-      // Filtered submissions
       const filtered = submissions.filter(item => {
-        // Status filter
-        if (statusFilter !== 'all' && item.status.toLowerCase() !== statusFilter) {
-          return false;
-        }
-
-        // Search query
+        if (statusFilter !== 'all' && item.status.toLowerCase() !== statusFilter) return false;
         if (searchQuery) {
           const name = (item.full_name || '').toLowerCase();
           const email = (item.email || '').toLowerCase();
           const phone = (item.phone || '').toLowerCase();
           const message = (item.message || '').toLowerCase();
-          
-          return name.includes(searchQuery) || 
-                 email.includes(searchQuery) || 
-                 phone.includes(searchQuery) ||
-                 message.includes(searchQuery);
+          return name.includes(searchQuery) || email.includes(searchQuery) || phone.includes(searchQuery) || message.includes(searchQuery);
         }
-
         return true;
       });
 
       if (filtered.length === 0) {
-        tbody.innerHTML = `
-          <tr>
-            <td colspan="8" class="text-center py-12 text-white/40 text-sm">No enquiries found.</td>
-          </tr>
-        `;
+        tbody.innerHTML = `<tr><td colspan="8" class="text-center py-12 text-white/40 text-sm">No enquiries found.</td></tr>`;
         return;
       }
 
       tbody.innerHTML = filtered.map(item => {
         const formattedDate = new Date(item.created_at).toLocaleDateString(undefined, {
-          month: 'short',
-          day: 'numeric',
-          year: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit'
+          month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit'
         });
-
-        // Determine badge style or text for status dropdown
         const statusVal = (item.status || 'new').toLowerCase();
 
         return `
@@ -337,7 +615,7 @@
             <td class="px-6 py-4 text-sm text-white/60 max-w-xs truncate" title="${escapeHTML(item.message)}">${escapeHTML(item.message)}</td>
             <td class="px-6 py-4 text-xs text-white/40 whitespace-nowrap">${formattedDate}</td>
             <td class="px-6 py-4 text-sm whitespace-nowrap">
-              <select onchange="handleStatusChange('${item.id}', this.value)" class="status-select">
+              <select onchange="handleSubmissionStatusChange('${item.id}', this.value)" class="status-select">
                 <option value="new" ${statusVal === 'new' ? 'selected' : ''}>New</option>
                 <option value="contacted" ${statusVal === 'contacted' ? 'selected' : ''}>Contacted</option>
                 <option value="in progress" ${statusVal === 'in progress' ? 'selected' : ''}>In Progress</option>
@@ -345,7 +623,7 @@
               </select>
             </td>
             <td class="px-6 py-4 text-sm text-right whitespace-nowrap">
-              <button onclick="confirmDelete('${item.id}')" class="text-red-400 hover:text-red-300 text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-red-500/10 border border-red-500/0 hover:border-red-500/20 transition-all duration-200">
+              <button onclick="confirmDeleteSubmission('${item.id}')" class="text-red-400 hover:text-red-300 text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-red-500/10 border border-red-500/0 hover:border-red-500/20 transition-all duration-200">
                 Delete
               </button>
             </td>
@@ -354,25 +632,180 @@
       }).join('');
     }
 
-    async function handleStatusChange(id, newStatus) {
+    async function handleSubmissionStatusChange(id, newStatus) {
       try {
         await window.adminService.updateSubmissionStatus(id, newStatus);
-        // Update local memory data status
         const item = submissions.find(item => item.id === id);
         if (item) item.status = newStatus;
-        updateStats();
+        updateEnquiriesStats();
       } catch (err) {
         console.error('Failed to update status:', err);
         alert('Failed to update status: ' + err.message);
-        await refreshData(); // Revert ui on error
+        await refreshEnquiriesData();
       }
     }
 
-    function confirmDelete(id) {
+    function confirmDeleteSubmission(id) {
+      deleteType = 'submission';
       deleteTargetId = id;
+      document.getElementById('delete-modal-title').innerText = 'Delete Enquiry';
+      document.getElementById('delete-modal-desc').innerText = 'Are you sure you want to permanently delete this submission? This action cannot be undone.';
       document.getElementById('delete-modal').classList.remove('hidden');
     }
 
+
+    // ── REVIEWS LOGIC ──
+    async function refreshReviewsData() {
+      try {
+        reviews = await window.adminService.fetchReviews();
+        updateReviewsStats();
+        renderReviewsTable();
+      } catch (err) {
+        console.error('Error fetching reviews:', err);
+        document.getElementById('review-table-body').innerHTML = `
+          <tr>
+            <td colspan="7" class="text-center py-12 text-red-400 text-sm">Failed to load reviews.</td>
+          </tr>
+        `;
+      }
+    }
+
+    function updateReviewsStats() {
+      const total = reviews.length;
+      const approved = reviews.filter(r => r.status === 'Approved').length;
+      const pending = reviews.filter(r => r.status === 'Pending').length;
+      
+      document.getElementById('review-stat-total').innerText = total;
+      document.getElementById('review-stat-approved').innerText = approved;
+      document.getElementById('review-stat-pending').innerText = pending;
+    }
+
+    function renderReviewsTable() {
+      const searchQuery = document.getElementById('review-search-input').value.toLowerCase().trim();
+      const statusFilter = document.getElementById('review-filter-status').value;
+      const tbody = document.getElementById('review-table-body');
+
+      const filtered = reviews.filter(item => {
+        if (statusFilter !== 'all' && item.status.toLowerCase() !== statusFilter) return false;
+        if (searchQuery) {
+          const name = (item.client_name || '').toLowerCase();
+          const reviewText = (item.detailed_review || '').toLowerCase();
+          const service = (item.service_used || '').toLowerCase();
+          return name.includes(searchQuery) || reviewText.includes(searchQuery) || service.includes(searchQuery);
+        }
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" class="text-center py-12 text-white/40 text-sm">No reviews found.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(item => {
+        const formattedDate = new Date(item.created_at).toLocaleDateString(undefined, {
+          month: 'short', day: 'numeric', year: 'numeric'
+        });
+        const statusVal = (item.status || 'Pending').toLowerCase();
+        
+        // Stars display
+        const stars = '★'.repeat(item.rating) + '☆'.repeat(5 - item.rating);
+
+        return `
+          <tr class="hover:bg-white/[0.01] transition-colors duration-150">
+            <td class="px-6 py-4 text-sm font-semibold text-white whitespace-nowrap flex items-center gap-3">
+              <div class="h-7 w-7 rounded-full border border-white/10 bg-white/5 flex items-center justify-center overflow-hidden flex-shrink-0">
+                ${item.photo_url 
+                  ? `<img src="${item.photo_url}" class="h-full w-full object-cover">` 
+                  : `<span class="text-[8px] text-white/45">AV</span>`
+                }
+              </div>
+              <span>${escapeHTML(item.client_name)}</span>
+            </td>
+            <td class="px-6 py-4 text-sm text-white/70 whitespace-nowrap">${escapeHTML(item.service_used)}</td>
+            <td class="px-6 py-4 text-sm text-yellow-400 whitespace-nowrap" title="${item.rating} Stars">${stars}</td>
+            <td class="px-6 py-4 text-sm text-white/60 max-w-xs truncate" title="${escapeHTML(item.detailed_review)}">${escapeHTML(item.detailed_review)}</td>
+            <td class="px-6 py-4 text-xs text-white/40 whitespace-nowrap">${formattedDate}</td>
+            <td class="px-6 py-4 text-sm whitespace-nowrap">
+              <select onchange="handleReviewStatusUpdate('${item.id}', this.value)" class="status-select">
+                <option value="Pending" ${item.status === 'Pending' ? 'selected' : ''}>Pending</option>
+                <option value="Approved" ${item.status === 'Approved' ? 'selected' : ''}>Approved</option>
+                <option value="Rejected" ${item.status === 'Rejected' ? 'selected' : ''}>Rejected</option>
+              </select>
+            </td>
+            <td class="px-6 py-4 text-sm text-right whitespace-nowrap space-x-2">
+              <button onclick="openEditReviewModal('${item.id}')" class="text-white hover:text-purple-400 text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-white/5 border border-white/5 hover:border-white/10 transition-all duration-200">
+                Details
+              </button>
+              <button onclick="confirmDeleteReview('${item.id}')" class="text-red-400 hover:text-red-300 text-xs font-semibold px-3 py-1.5 rounded-full hover:bg-red-500/10 border border-red-500/0 hover:border-red-500/20 transition-all duration-200">
+                Delete
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    async function handleReviewStatusUpdate(id, newStatus) {
+      try {
+        await window.adminService.updateReviewStatus(id, newStatus);
+        const item = reviews.find(r => r.id === id);
+        if (item) item.status = newStatus;
+        updateReviewsStats();
+      } catch (err) {
+        console.error('Failed to update status:', err);
+        alert('Failed to update status: ' + err.message);
+        await refreshReviewsData();
+      }
+    }
+
+    function confirmDeleteReview(id) {
+      deleteType = 'review';
+      deleteTargetId = id;
+      document.getElementById('delete-modal-title').innerText = 'Delete Review';
+      document.getElementById('delete-modal-desc').innerText = 'Are you sure you want to permanently delete this review? This action cannot be undone.';
+      document.getElementById('delete-modal').classList.remove('hidden');
+    }
+
+    function openEditReviewModal(id) {
+      const review = reviews.find(r => r.id === id);
+      if (!review) return;
+
+      currentEditReviewId = id;
+      editCompressedPhotoBase64 = review.photo_url || '';
+
+      document.getElementById('edit-client-name').value = review.client_name;
+      document.getElementById('edit-service-used').value = review.service_used;
+      document.getElementById('edit-star-rating').value = review.rating.toString();
+      document.getElementById('edit-review-status').value = review.status;
+      document.getElementById('edit-detailed-review').value = review.detailed_review;
+
+      const editPhotoPreview = document.getElementById('edit-photo-preview');
+      const editPhotoPlaceholder = document.getElementById('edit-photo-placeholder');
+      const removePhotoBtn = document.getElementById('remove-photo-btn');
+
+      if (review.photo_url) {
+        editPhotoPreview.src = review.photo_url;
+        editPhotoPreview.classList.remove('hidden');
+        editPhotoPlaceholder.classList.add('hidden');
+        removePhotoBtn.classList.remove('hidden');
+      } else {
+        editPhotoPreview.src = '';
+        editPhotoPreview.classList.add('hidden');
+        editPhotoPlaceholder.classList.remove('hidden');
+        removePhotoBtn.classList.add('hidden');
+      }
+
+      document.getElementById('review-modal').classList.remove('hidden');
+    }
+
+    function closeReviewModal() {
+      document.getElementById('review-modal').classList.add('hidden');
+      document.getElementById('edit-photo-file').value = '';
+      currentEditReviewId = null;
+      editCompressedPhotoBase64 = null;
+    }
+
+    // ── COMMON HELPERS ──
     function escapeHTML(str) {
       if (!str) return '';
       return str.replace(/[&<>'"]/g, 
