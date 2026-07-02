@@ -24,15 +24,12 @@ function Navbar() {
           />
         </a>
 
-        <div className="liquid-glass hidden items-center rounded-full p-1.5 md:flex">
+        <div class="liquid-glass hidden items-center rounded-full p-1.5 md:flex">
           {links.map((link) => (
-            <a key={link.label} href={link.href} className="whitespace-nowrap px-3 py-2 font-body text-sm font-medium text-white/90">
+            <a key={link.label} href={link.href} class="whitespace-nowrap px-4 py-2 font-body text-sm font-medium text-white/90 hover:text-white transition-colors duration-200">
               {link.label}
             </a>
           ))}
-          <a href="#contact" className="ml-1 flex items-center gap-1.5 whitespace-nowrap rounded-full bg-white px-4 py-2 font-body text-sm font-medium text-black">
-            Start a Project <ArrowUpRight className="h-4 w-4" />
-          </a>
         </div>
 
         <button
@@ -46,7 +43,9 @@ function Navbar() {
           <span className="h-px w-4 bg-white" />
         </button>
 
-        <div className="hidden h-12 w-12 md:block" aria-hidden="true" />
+        <a href="#contact" class="hidden md:flex items-center gap-1.5 whitespace-nowrap rounded-full bg-white px-5 py-2.5 font-body text-sm font-medium text-black hover:bg-white/90 transition-all duration-200">
+          Start a Project <ArrowUpRight class="h-4 w-4" />
+        </a>
       </div>
 
       {menuOpen && (
