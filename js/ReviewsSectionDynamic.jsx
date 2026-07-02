@@ -1,74 +1,75 @@
 /* ─────────────────────────────────────────────────────────────
-   ReviewsSectionDynamic.jsx  —  Swipeable Testimonials
+   ReviewsSectionDynamic.jsx  —  Redesigned Testimonials Grid
    Fetches approved reviews dynamically from Supabase database.
  ───────────────────────────────────────────────────────────────*/
 const { motion: pm } = Motion;
 
-function TestimonialCard({ handleShuffle, testimonial, position, rating, photoUrl, author, serviceUsed, profession }) {
-  const dragRef = React.useRef(0);
-  const isFront = position === "front";
+const DEFAULT_TESTIMONIALS = [
+  {
+    id: "mock-1",
+    author: "Sarah Jenkins",
+    profession: "Founder, Alpha Media Group",
+    testimonial: "SnapMark Media took our raw video content and turned it into high-converting Instagram reels. Our engagement skyrocketed by over 150% in the first two weeks!",
+    rating: 5,
+    serviceUsed: "Reels Editing",
+    photoUrl: "https://i.pravatar.cc/128?img=33"
+  },
+  {
+    id: "mock-2",
+    author: "Marcus Sterling",
+    profession: "Tech YouTuber, 1.2M Subs",
+    testimonial: "The pacing, sound design, and custom graphics they added were absolutely top-tier. They are highly responsive and deliver exactly on time.",
+    rating: 5,
+    serviceUsed: "Video Editing",
+    photoUrl: "https://i.pravatar.cc/128?img=12"
+  },
+  {
+    id: "mock-3",
+    author: "Elena Rostova",
+    profession: "Marketing Director, Nether Apparel",
+    testimonial: "Outstanding service! From invitation video cards to cinematic event recaps, their creative editors understand pacing and brand identity better than any team we've worked with.",
+    rating: 5,
+    serviceUsed: "Motion Graphics",
+    photoUrl: "https://i.pravatar.cc/128?img=47"
+  }
+];
 
-  // Build star rating indicators
+function TestimonialCard({ testimonial, rating, photoUrl, author, serviceUsed, profession, delayIndex }) {
   const stars = "★".repeat(rating || 5) + "☆".repeat(5 - (rating || 5));
-  
-  // Generic fallback avatar if none is uploaded
   const finalAvatar = photoUrl || "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y";
 
   return (
     <pm.div
-      style={{
-        zIndex: position === "front" ? "2" : position === "middle" ? "1" : "0"
-      }}
-      animate={{
-        rotate: position === "front" ? "-6deg" : position === "middle" ? "0deg" : "6deg",
-        x: position === "front" ? "0%" : position === "middle" ? "33%" : "66%",
-        scale: position === "front" ? 1 : position === "middle" ? 0.95 : 0.9,
-        opacity: position === "front" ? 1 : position === "middle" ? 0.4 : 0.1
-      }}
-      drag={true}
-      dragElastic={0.35}
-      dragListener={isFront}
-      dragConstraints={{
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0
-      }}
-      onDragStart={(e) => {
-        dragRef.current = e.clientX;
-      }}
-      onDragEnd={(e) => {
-        if (dragRef.current - e.clientX > 150 || e.clientX - dragRef.current > 150) {
-          handleShuffle();
-        }
-        dragRef.current = 0;
-      }}
-      transition={{ duration: 0.35 }}
-      className={`absolute left-0 top-0 grid h-[450px] w-[350px] max-w-[90vw] select-none place-content-center space-y-6 rounded-[2rem] p-8 shadow-[0_0_40px_rgba(139,92,246,0.1)] liquid-glass border border-white/5 ${
-        isFront ? "cursor-grab active:cursor-grabbing" : ""
-      }`}
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.6, delay: delayIndex * 0.1 }}
+      whileHover={{ y: -6, scale: 1.02 }}
+      className="liquid-glass flex flex-col justify-between rounded-[2rem] p-8 shadow-[0_4px_30px_rgba(139,92,246,0.02)] border border-white/5 hover:border-white/10 hover:shadow-[0_12px_40px_rgba(139,92,246,0.12)] transition-all duration-300 min-h-[300px]"
     >
-      <div className="relative mx-auto h-28 w-28">
-        <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 opacity-40 blur-md"></div>
-        <img
-          src={finalAvatar}
-          alt={`Avatar of ${author}`}
-          className="relative pointer-events-none h-full w-full rounded-full border-[3px] border-white/10 object-cover shadow-xl"
-        />
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <span className="text-yellow-400 text-sm tracking-wider">{stars}</span>
+          {serviceUsed && (
+            <span className="rounded-full bg-white/5 border border-white/10 px-2.5 py-1 text-[9px] font-semibold uppercase tracking-widest text-white/50">
+              {serviceUsed}
+            </span>
+          )}
+        </div>
+        
+        <p className="font-body text-sm italic leading-relaxed text-white/80">
+          "{testimonial}"
+        </p>
       </div>
 
-      <div class="text-center space-y-1">
-        <div class="text-yellow-400 text-sm tracking-wider">{stars}</div>
-        <div class="text-[10px] uppercase font-semibold tracking-widest text-white/50">{serviceUsed}</div>
-      </div>
-      
-      <p className="text-center font-body text-base italic leading-relaxed text-white/80 line-clamp-4">"{testimonial}"</p>
-      
-      <div>
-        <p className="text-center font-heading text-xl font-bold tracking-wide" style={{ background: "linear-gradient(90deg, #d8b4fe 0%, #60a5fa 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-          {author}
-        </p>
-        <p className="mt-1 text-center font-body text-xs font-semibold uppercase tracking-widest text-white/40">{profession || "Client"}</p>
+      <div className="mt-8 flex items-center gap-4 border-t border-white/5 pt-6">
+        <div className="h-11 w-11 rounded-full border border-white/10 overflow-hidden flex-shrink-0 bg-white/5">
+          <img src={finalAvatar} alt={author} className="h-full w-full object-cover" />
+        </div>
+        <div>
+          <h4 className="font-body text-sm font-semibold text-white tracking-wide">{author}</h4>
+          <p className="text-[11px] text-white/45 font-medium">{profession}</p>
+        </div>
       </div>
     </pm.div>
   );
@@ -102,7 +103,7 @@ function ReviewsSection() {
         const mapped = data.map(item => ({
           id: item.id,
           author: item.client_name,
-          profession: item.client_profession,
+          profession: item.client_profession || "Client",
           testimonial: item.detailed_review,
           rating: item.rating,
           serviceUsed: item.service_used,
@@ -121,119 +122,74 @@ function ReviewsSection() {
     loadReviews();
   }, []);
 
-  const handleShuffle = () => {
-    if (testimonials.length <= 1) return;
-    setTestimonials((prev) => {
-      const copy = [...prev];
-      const front = copy.shift();
-      copy.push(front);
-      return copy;
-    });
-  };
-
-  const handleShuffleBack = () => {
-    if (testimonials.length <= 1) return;
-    setTestimonials((prev) => {
-      const copy = [...prev];
-      const back = copy.pop();
-      copy.unshift(back);
-      return copy;
-    });
-  };
+  const displayReviews = testimonials.length > 0 ? testimonials : DEFAULT_TESTIMONIALS;
 
   return (
-    <section id="reviews" className="relative overflow-hidden px-4 py-24 md:px-16 lg:px-20">
-      {/* Ambient blobs */}
-      <div className="pointer-events-none absolute left-[10%] top-[20%] h-[400px] w-[400px] rounded-full opacity-15"
-        style={{ background: "radial-gradient(circle, rgba(236,72,153,0.5) 0%, transparent 70%)", filter: "blur(60px)" }} />
+    <section id="reviews" className="relative overflow-hidden px-6 py-24 md:px-16 lg:px-20 border-t border-white/5">
+      {/* Ambient decorative lighting */}
+      <div className="pointer-events-none absolute left-[10%] top-[20%] h-[400px] w-[400px] rounded-full opacity-10"
+        style={{ background: "radial-gradient(circle, rgba(139,92,246,0.3) 0%, transparent 70%)", filter: "blur(65px)" }} />
       <div className="pointer-events-none absolute right-[5%] bottom-[10%] h-[500px] w-[500px] rounded-full opacity-10"
-        style={{ background: "radial-gradient(circle, rgba(59,130,246,0.5) 0%, transparent 70%)", filter: "blur(80px)" }} />
+        style={{ background: "radial-gradient(circle, rgba(236,72,153,0.2) 0%, transparent 70%)", filter: "blur(85px)" }} />
 
       <div className="relative mx-auto max-w-[1440px]">
-        <div className="mb-20 text-center">
+        {/* Section Header */}
+        <div className="mb-20 text-center space-y-4">
           <pm.p
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="font-body text-sm text-white/70"
+            className="font-body text-xs font-semibold uppercase tracking-[0.2em] text-[#00f0ff]"
           >
-            // Client Reviews
+            CLIENT REVIEWS
           </pm.p>
           <pm.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.1 }}
-            className="mt-4 font-heading text-4xl italic leading-tight tracking-[-1px] text-white sm:text-5xl md:text-6xl"
+            className="font-heading text-4xl italic leading-tight tracking-[-1px] text-white sm:text-5xl md:text-6xl"
           >
-            Trusted <span style={{ background: "linear-gradient(90deg, #a78bfa 0%, #f472b6 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Clients</span>
+            What Our <span style={{ background: "linear-gradient(90deg, #a78bfa 0%, #f472b6 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Clients</span> Say
           </pm.h2>
+          <pm.p
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="font-body text-sm text-white/50 max-w-md mx-auto leading-relaxed"
+          >
+            Real feedback from creators and brands who partner with SnapMark Media to elevate their media presence.
+          </pm.p>
         </div>
 
-        {/* Swipeable Cards Container */}
-        <div className="relative mx-auto h-[450px] w-[350px] max-w-full flex items-center justify-center">
-          {loading ? (
-            <div className="text-white/40 text-sm font-body animate-pulse">Loading reviews...</div>
-          ) : error ? (
-            <div className="text-red-400/60 text-sm font-body">Unable to load reviews at this time.</div>
-          ) : testimonials.length === 0 ? (
-            <div class="text-white/40 text-sm font-body text-center p-8 liquid-glass border border-white/5 rounded-[2rem] w-full h-[200px] flex items-center justify-center">
-              No client reviews have been published yet.
-            </div>
-          ) : (
-            testimonials.map((t, index) => {
-              let position = "back";
-              if (index === 0) position = "front";
-              else if (index === 1) position = "middle";
-
-              return (
-                <TestimonialCard
-                  key={t.id}
-                  id={t.id}
-                  author={t.author}
-                  profession={t.profession}
-                  testimonial={t.testimonial}
-                  rating={t.rating}
-                  serviceUsed={t.serviceUsed}
-                  photoUrl={t.photoUrl}
-                  position={position}
-                  handleShuffle={handleShuffle}
-                />
-              );
-            })
-          )}
-        </div>
-        
-        {/* Navigation Arrows */}
-        {!loading && !error && testimonials.length > 1 && (
-          <div className="mt-12 flex items-center justify-center gap-6">
-            <pm.button
-              whileHover={{ scale: 1.1, backgroundColor: "rgba(255,255,255,0.1)" }}
-              whileTap={{ scale: 0.9 }}
-              onClick={handleShuffleBack}
-              className="liquid-glass flex h-12 w-12 items-center justify-center rounded-full text-white/70 transition-colors hover:text-white"
-            >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-              </svg>
-            </pm.button>
-            
-            <p className="font-body text-xs font-semibold uppercase tracking-[0.2em] text-white/30 italic">Swipe or Click</p>
-            
-            <pm.button
-              whileHover={{ scale: 1.1, backgroundColor: "rgba(255,255,255,0.1)" }}
-              whileTap={{ scale: 0.9 }}
-              onClick={handleShuffle}
-              className="liquid-glass flex h-12 w-12 items-center justify-center rounded-full text-white/70 transition-colors hover:text-white"
-            >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-              </svg>
-            </pm.button>
+        {/* Testimonials Grid Layout */}
+        {loading ? (
+          <div className="flex justify-center items-center py-20">
+            <div className="text-white/40 text-sm font-body animate-pulse uppercase tracking-wider">// Loading reviews...</div>
+          </div>
+        ) : error ? (
+          <div className="flex justify-center items-center py-20">
+            <div className="text-red-400/60 text-sm font-body uppercase tracking-wider">// Unable to load reviews at this time.</div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {displayReviews.map((t, index) => (
+              <TestimonialCard
+                key={t.id}
+                author={t.author}
+                testimonial={t.testimonial}
+                rating={t.rating}
+                serviceUsed={t.serviceUsed}
+                photoUrl={t.photoUrl}
+                profession={t.profession}
+                delayIndex={index}
+              />
+            ))}
           </div>
         )}
-
+        
         {/* Leave a Review Button */}
         <div className="mt-16 flex justify-center">
           <pm.a
