@@ -10,7 +10,7 @@ function Navbar() {
 
   return (
     <nav className="fixed left-0 right-0 top-4 z-50 px-5 md:px-8 lg:px-16" aria-label="Main navigation">
-      <div className="flex items-center justify-between">
+      <div className="relative flex items-center justify-between">
         <a href="#home" aria-label="Snapmark Media home" className="liquid-glass flex h-12 w-12 items-center justify-center rounded-full">
           <img
             src="assets/snapmark-logo.png"
@@ -24,7 +24,7 @@ function Navbar() {
           />
         </a>
 
-        <div class="liquid-glass hidden items-center rounded-full p-1.5 md:flex">
+        <div class="liquid-glass hidden items-center rounded-full p-1.5 md:flex absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2">
           {links.map((link) => (
             <a key={link.label} href={link.href} class="whitespace-nowrap px-4 py-2 font-body text-sm font-medium text-white/90 hover:text-white transition-colors duration-200">
               {link.label}
