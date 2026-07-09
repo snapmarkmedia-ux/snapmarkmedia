@@ -415,8 +415,11 @@ function GallerySection() {
       )}
 
       <div className="flex w-full justify-center mt-6">
-        <button className="flex items-center gap-2 rounded-full bg-rose-500 hover:bg-rose-600 px-6 py-2.5 font-body text-sm font-medium text-white transition-colors duration-200 min-h-[44px]">
-          View All Stories <ArrowUpRight className="h-4 w-4" />
+        <button
+          onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+          className="flex items-center gap-2 rounded-full bg-rose-500 hover:bg-rose-600 px-6 py-2.5 font-body text-sm font-medium text-white transition-colors duration-200 min-h-[44px] cursor-pointer"
+        >
+          Book a Call <ArrowUpRight className="h-4 w-4" />
         </button>
       </div>
 
