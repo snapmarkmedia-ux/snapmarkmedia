@@ -102,6 +102,7 @@ function Photo({
   direction,
   width,
   height,
+  onClick,
   ...props
 }) {
   const rotation = React.useMemo(() => {
@@ -129,6 +130,7 @@ function Photo({
 
   return (
     <motionGlobal.div
+      onClick={onClick}
       drag
       dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
       dragTransition={{ bounceStiffness: 200, bounceDamping: 20 }}
@@ -248,7 +250,8 @@ function GallerySection() {
     }),
   };
 
-  const { motion: motionGlobal } = Motion;
+  const { motion: motionGlobal, AnimatePresence } = Motion;
+  const [activePhoto, setActivePhoto] = React.useState(null);
 
   return (
     <section id="gallery" className="relative min-h-screen px-8 pb-16 pt-28 md:px-16 lg:px-20 overflow-hidden flex flex-col justify-center items-center">
@@ -257,7 +260,7 @@ function GallerySection() {
         A Journey Through Visual Stories
       </p>
       <h3 className="z-20 mx-auto max-w-2xl justify-center text-center text-4xl font-heading italic text-white md:text-7xl mb-8">
-        Welcome to My <span className="text-rose-500"> Stories</span>
+        Featured <span className="text-rose-500"> Work</span>
       </h3>
       <div className="relative mb-8 h-[350px] w-full items-center justify-center lg:flex">
         <motionGlobal.div
@@ -288,6 +291,7 @@ function GallerySection() {
                   src={photo.src}
                   alt="Gallery photo"
                   direction={photo.direction}
+                  onClick={() => setActivePhoto(photo.src)}
                 />
               </motionGlobal.div>
             ))}
@@ -299,6 +303,42 @@ function GallerySection() {
           View All Stories <ArrowUpRight className="h-4 w-4" />
         </button>
       </div>
+
+      {/* 3D Image Modal Popup */}
+      <AnimatePresence>
+        {activePhoto && (
+          <motionGlobal.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setActivePhoto(null)}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md cursor-zoom-out"
+          >
+            <motionGlobal.div
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative max-w-4xl max-h-[90vh] overflow-hidden rounded-3xl border border-white/10 bg-zinc-950 shadow-2xl flex items-center justify-center cursor-default"
+            >
+              <img
+                src={activePhoto}
+                alt="Enlarged Gallery Photo"
+                className="max-w-full max-h-[85vh] object-contain rounded-2xl p-2"
+              />
+              <button
+                onClick={() => setActivePhoto(null)}
+                className="absolute top-4 right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/55 border border-white/10 text-white/70 hover:text-white hover:bg-black/80 transition-colors duration-200 cursor-pointer"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="h-5 w-5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </motionGlobal.div>
+          </motionGlobal.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }
