@@ -4,12 +4,12 @@
    Uses the same Motion / Framer-Motion UMD global already loaded
 ───────────────────────────────────────────────────────────────*/
 const {
-  motion: pm,
+  motion: pm, 
   useMotionValue,
-  useSpring,
-  useTransform,
-  useInView,
-  AnimatePresence,
+  useSpring, 
+  useTransform, 
+  useInView, 
+  AnimatePresence, 
 } = Motion;
 /* ── Custom Animated Name ────────────────────────────────────── */
 function AnimatedName({ name }) {

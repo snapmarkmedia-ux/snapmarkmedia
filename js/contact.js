@@ -39,3 +39,4 @@ window.submitContactForm = async function(formData) {
 
   return true;
 };
+

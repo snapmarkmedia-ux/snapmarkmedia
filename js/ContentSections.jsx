@@ -86,71 +86,218 @@ function ServicesSection() {
   );
 }
 
-function GalleryCard({ item, className = "" }) {
+function getRandomNumberInRange(min, max) {
+  if (min >= max) {
+    throw new Error("Min value should be less than max value");
+  }
+  return Math.random() * (max - min) + min;
+}
+
+const cn = (...classes) => classes.filter(Boolean).join(" ");
+
+function Photo({
+  src,
+  alt,
+  className,
+  direction,
+  width,
+  height,
+  ...props
+}) {
+  const rotation = React.useMemo(() => {
+    return getRandomNumberInRange(1, 4) * (direction === "left" ? -1 : 1);
+  }, [direction]);
+
+  const mouseX = Motion.useMotionValue(110);
+  const mouseY = Motion.useMotionValue(110);
+
+  const rotateX = Motion.useTransform(mouseY, [0, 220], [15, -15]);
+  const rotateY = Motion.useTransform(mouseX, [0, 220], [-15, 15]);
+
+  function handleMouse(event) {
+    const rect = event.currentTarget.getBoundingClientRect();
+    mouseX.set(event.clientX - rect.left);
+    mouseY.set(event.clientY - rect.top);
+  }
+
+  const resetMouse = () => {
+    mouseX.set(110);
+    mouseY.set(110);
+  };
+
+  const { motion: motionGlobal } = Motion;
+
   return (
-    <sectionMotion.article
-      {...revealProps}
+    <motionGlobal.div
+      drag
+      dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
+      dragTransition={{ bounceStiffness: 200, bounceDamping: 20 }}
+      whileTap={{ scale: 1.15 }}
       whileHover={{
-        y: -5,
-        scale: 1.01,
-        boxShadow: "0 15px 35px rgba(100, 180, 255, 0.12), inset 0 1px 1px rgba(255, 255, 255, 0.18)",
-        backgroundColor: "rgba(255,255,255,0.03)"
+        scale: 1.08,
+        rotateZ: 2 * (direction === "left" ? -1 : 1),
       }}
-      transition={{ type: "spring", stiffness: 300, damping: 20 }}
-      className={`liquid-glass group flex min-h-[350px] flex-col rounded-[1.25rem] p-3 transition-colors duration-300 cursor-pointer ${className}`}
+      whileDrag={{
+        scale: 1.12,
+      }}
+      style={{
+        width,
+        height,
+        perspective: 600,
+        rotateX,
+        rotateY,
+        rotateZ: rotation,
+        WebkitTouchCallout: "none",
+        WebkitUserSelect: "none",
+        userSelect: "none",
+        touchAction: "none",
+        willChange: "transform",
+      }}
+      className={cn(
+        className,
+        "relative mx-auto shrink-0 cursor-grab active:cursor-grabbing"
+      )}
+      onMouseMove={handleMouse}
+      onMouseLeave={resetMouse}
+      draggable={false}
+      tabIndex={0}
     >
-      <div className="relative flex min-h-[230px] flex-1 items-center justify-center overflow-hidden rounded-[1rem] bg-black/30">
-        {item.src && item.kind === "video" && (
-          <video
-            src={item.src}
-            muted
-            autoPlay
-            playsInline
-            loop
-            className="absolute inset-0 h-full w-full object-cover transform group-hover:scale-105 transition-transform duration-700"
-          />
-        )}
-        {item.src && item.kind === "image" && (
-          <img
-            src={item.src}
-            alt={item.title}
-            className="absolute inset-0 h-full w-full object-cover transform group-hover:scale-105 transition-transform duration-700"
-          />
-        )}
-        {!item.src && (
-          <div className="transform group-hover:scale-110 transition-transform duration-500">
-            <GlassIcon path={item.kind === "video" ? iconPaths.movie : iconPaths.image} />
-          </div>
-        )}
-        <span className="liquid-glass absolute left-3 top-3 rounded-full px-3 py-1 font-body text-[11px] text-white/90">{item.label}</span>
+      <div className="relative h-full w-full overflow-hidden rounded-3xl shadow-lg border border-white/10 bg-zinc-900">
+        <motionGlobal.img
+          className={cn("rounded-3xl object-cover absolute inset-0 w-full h-full")}
+          src={src}
+          alt={alt}
+          {...props}
+          draggable={false}
+        />
       </div>
-      <div className="flex items-end justify-between gap-4 px-3 pb-2 pt-5">
-        <div>
-          <h3 className="font-heading text-3xl italic leading-none tracking-[-1px] text-white group-hover:text-blue-400 transition-colors duration-300">{item.title}</h3>
-          <p className="mt-2 font-body text-xs font-light text-white/70">Project details placeholder</p>
-        </div>
-        <ArrowUpRight className="h-5 w-5 shrink-0 text-white transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
-      </div>
-    </sectionMotion.article>
+    </motionGlobal.div>
   );
 }
 
 function GallerySection() {
-  const galleryItems = [
-    { title: "Featured Project", label: "Featured", kind: "video", src: BACKGROUND_VIDEO },
-    { title: "Recent Work 01", label: "Recent Work", kind: "image", src: null },
-    { title: "Video Showcase", label: "Video", kind: "video", src: null },
-    { title: "Image Gallery", label: "Image", kind: "image", src: null },
-    { title: "Recent Work 02", label: "Recent Work", kind: "image", src: null }
+  // Photo positions - horizontal layout with random y offsets
+  const photos = [
+    {
+      id: 1,
+      order: 0,
+      x: "-320px",
+      y: "15px",
+      zIndex: 50, // Highest z-index (on top)
+      direction: "left",
+      src: "assets/gallery-1.jpg",
+    },
+    {
+      id: 2,
+      order: 1,
+      x: "-160px",
+      y: "32px",
+      zIndex: 40,
+      direction: "left",
+      src: "assets/gallery-2.jpg",
+    },
+    {
+      id: 3,
+      order: 2,
+      x: "0px",
+      y: "8px",
+      zIndex: 30,
+      direction: "right",
+      src: "assets/gallery-3.png",
+    },
+    {
+      id: 4,
+      order: 3,
+      x: "160px",
+      y: "22px",
+      zIndex: 20,
+      direction: "right",
+      src: "assets/gallery-4.png",
+    },
+    {
+      id: 5,
+      order: 4,
+      x: "320px",
+      y: "44px",
+      zIndex: 10, // Lowest z-index (at bottom)
+      direction: "left",
+      src: "assets/gallery-5.png",
+    },
   ];
 
+  // Animation variants for each photo
+  const photoVariants = {
+    hidden: {
+      x: 0,
+      y: 0,
+      opacity: 0,
+      scale: 0.8,
+    },
+    visible: (custom) => ({
+      x: custom.x,
+      y: custom.y,
+      opacity: 1,
+      scale: 1,
+      transition: {
+        type: "spring",
+        stiffness: 80,
+        damping: 15,
+        mass: 1,
+        delay: custom.order * 0.12,
+      },
+    }),
+  };
+
+  const { motion: motionGlobal } = Motion;
+
   return (
-    <section id="gallery" className="relative min-h-screen px-8 pb-16 pt-28 md:px-16 lg:px-20">
-      <div className="mx-auto max-w-[1440px]">
-        <SectionHeading kicker="Art Gallery / Portfolio" lineOne="Selected" lineTwo="work" description="Gallery introduction placeholder. Add a short line about the ideas and craft behind the studio's featured projects." />
-        <div className="mt-16 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {galleryItems.map((item, index) => <GalleryCard key={item.title} item={item} className={index === 0 ? "md:col-span-2" : ""} />)}
-        </div>
+    <section id="gallery" className="relative min-h-screen px-8 pb-16 pt-28 md:px-16 lg:px-20 overflow-hidden flex flex-col justify-center items-center">
+      <div className="absolute inset-0 max-md:hidden top-[200px] -z-10 h-[300px] w-full bg-transparent bg-[linear-gradient(to_right,#57534e_1px,transparent_1px),linear-gradient(to_bottom,#57534e_1px,transparent_1px)] bg-[size:3rem_3rem] opacity-20 [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]"></div>
+      <p className="lg:text-md my-2 text-center text-xs font-light uppercase tracking-widest text-slate-400 font-body">
+        A Journey Through Visual Stories
+      </p>
+      <h3 className="z-20 mx-auto max-w-2xl justify-center text-center text-4xl font-heading italic text-white md:text-7xl mb-8">
+        Welcome to My <span className="text-rose-500"> Stories</span>
+      </h3>
+      <div className="relative mb-8 h-[350px] w-full items-center justify-center lg:flex">
+        <motionGlobal.div
+          className="relative mx-auto flex w-full max-w-7xl justify-center"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+        >
+          <div className="relative h-[220px] w-[220px]">
+            {/* Render photos in reverse order so that higher z-index photos are rendered later in the DOM */}
+            {[...photos].reverse().map((photo) => (
+              <motionGlobal.div
+                key={photo.id}
+                className="absolute left-0 top-0"
+                style={{ zIndex: photo.zIndex }} // Apply z-index directly in style
+                variants={photoVariants}
+                custom={{
+                  x: photo.x,
+                  y: photo.y,
+                  order: photo.order,
+                }}
+                whileHover={{ zIndex: 9999 }}
+                whileTap={{ zIndex: 9999 }}
+              >
+                <Photo
+                  width={220}
+                  height={220}
+                  src={photo.src}
+                  alt="Gallery photo"
+                  direction={photo.direction}
+                />
+              </motionGlobal.div>
+            ))}
+          </div>
+        </motionGlobal.div>
+      </div>
+      <div className="flex w-full justify-center">
+        <button className="flex items-center gap-2 rounded-full bg-rose-500 hover:bg-rose-600 px-6 py-2.5 font-body text-sm font-medium text-white transition-colors duration-200">
+          View All Stories <ArrowUpRight className="h-4 w-4" />
+        </button>
       </div>
     </section>
   );

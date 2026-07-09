@@ -150,4 +150,4 @@ function ServiceContent({ activeIndex, onViewWorkHover, onViewWorkClick }) {
   );
 }
 
-window.ServiceContent = ServiceContent;
+window.ServiceContent = ServiceContent
