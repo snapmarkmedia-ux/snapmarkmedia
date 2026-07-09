@@ -179,6 +179,7 @@ function Photo({
 
 function GallerySection() {
   const [isMobile, setIsMobile] = React.useState(false);
+  const [currentIndex, setCurrentIndex] = React.useState(2); // Start with middle image (index 2)
 
   React.useEffect(() => {
     const handleResize = () => {
@@ -194,8 +195,8 @@ function GallerySection() {
     {
       id: 1,
       order: 0,
-      x: isMobile ? "-90px" : "-320px",
-      y: isMobile ? "0px" : "15px",
+      x: "-320px",
+      y: "15px",
       zIndex: 50, // Highest z-index (on top)
       direction: "left",
       src: "assets/gallery-1.jpg",
@@ -203,8 +204,8 @@ function GallerySection() {
     {
       id: 2,
       order: 1,
-      x: isMobile ? "-45px" : "-160px",
-      y: isMobile ? "10px" : "32px",
+      x: "-160px",
+      y: "32px",
       zIndex: 40,
       direction: "left",
       src: "assets/gallery-2.jpg",
@@ -213,7 +214,7 @@ function GallerySection() {
       id: 3,
       order: 2,
       x: "0px",
-      y: isMobile ? "20px" : "8px",
+      y: "8px",
       zIndex: 30,
       direction: "right",
       src: "assets/gallery-3.png",
@@ -221,8 +222,8 @@ function GallerySection() {
     {
       id: 4,
       order: 3,
-      x: isMobile ? "45px" : "160px",
-      y: isMobile ? "10px" : "22px",
+      x: "160px",
+      y: "22px",
       zIndex: 20,
       direction: "right",
       src: "assets/gallery-4.png",
@@ -230,15 +231,23 @@ function GallerySection() {
     {
       id: 5,
       order: 4,
-      x: isMobile ? "90px" : "320px",
-      y: isMobile ? "0px" : "44px",
+      x: "320px",
+      y: "44px",
       zIndex: 10, // Lowest z-index (at bottom)
       direction: "left",
       src: "assets/gallery-5.png",
     },
   ];
 
-  // Animation variants for each photo
+  const handlePrev = () => {
+    setCurrentIndex((prev) => (prev === 0 ? photos.length - 1 : prev - 1));
+  };
+
+  const handleNext = () => {
+    setCurrentIndex((prev) => (prev === photos.length - 1 ? 0 : prev + 1));
+  };
+
+  // Animation variants for each photo (Desktop fanned layout)
   const photoVariants = {
     hidden: {
       x: 0,
@@ -264,7 +273,23 @@ function GallerySection() {
   const { motion: motionGlobal, AnimatePresence } = Motion;
   const [activePhoto, setActivePhoto] = React.useState(null);
 
-  const cardSize = isMobile ? 140 : 220;
+  // Mobile carousel math
+  const getCardStyle = (index) => {
+    const diff = index - currentIndex;
+    const absDiff = Math.abs(diff);
+    
+    // Shift cards by 140px horizontally on mobile
+    const xOffset = diff * 140;
+    
+    return {
+      x: `${xOffset}px`,
+      scale: diff === 0 ? 1.15 : 0.88,
+      opacity: diff === 0 ? 1 : absDiff === 1 ? 0.45 : 0,
+      zIndex: 10 - absDiff,
+      filter: diff === 0 ? "none" : "blur(1.5px)",
+      pointerEvents: diff === 0 ? "auto" : "none",
+    };
+  };
 
   return (
     <section id="gallery" className="relative min-h-screen px-4 pb-16 pt-28 md:px-16 lg:px-20 overflow-hidden flex flex-col justify-center items-center">
@@ -275,42 +300,120 @@ function GallerySection() {
       <h3 className="z-20 mx-auto max-w-2xl justify-center text-center text-3xl sm:text-4xl md:text-7xl font-heading italic text-white mb-8">
         Featured <span className="text-rose-500"> Work</span>
       </h3>
-      <div className="relative mb-8 h-[240px] sm:h-[350px] w-full items-center justify-center lg:flex">
-        <motionGlobal.div
-          className="relative mx-auto flex w-full max-w-7xl justify-center"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-        >
-          <div className="relative" style={{ width: cardSize, height: cardSize }}>
-            {/* Render photos in reverse order so that higher z-index photos are rendered later in the DOM */}
-            {[...photos].reverse().map((photo) => (
-              <motionGlobal.div
-                key={photo.id}
-                className="absolute left-0 top-0"
-                style={{ zIndex: photo.zIndex }} // Apply z-index directly in style
-                variants={photoVariants}
-                custom={{
-                  x: photo.x,
-                  y: photo.y,
-                  order: photo.order,
-                }}
-                whileHover={{ zIndex: 9999 }}
-                whileTap={{ zIndex: 9999 }}
-              >
-                <Photo
-                  width={cardSize}
-                  height={cardSize}
-                  src={photo.src}
-                  alt="Gallery photo"
-                  direction={photo.direction}
-                  onClick={() => setActivePhoto(photo.src)}
-                />
-              </motionGlobal.div>
-            ))}
+
+      {isMobile ? (
+        /* Mobile Carousel Layout */
+        <div className="relative mb-6 w-full flex flex-col items-center">
+          <motionGlobal.div
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.25}
+            onDragEnd={(e, info) => {
+              const swipeThreshold = 40;
+              if (info.offset.x < -swipeThreshold) {
+                handleNext();
+              } else if (info.offset.x > swipeThreshold) {
+                handlePrev();
+              }
+            }}
+            className="relative flex items-center justify-center h-[240px] w-full cursor-grab active:cursor-grabbing overflow-visible select-none"
+          >
+            {photos.map((photo, index) => {
+              const style = getCardStyle(index);
+              return (
+                <motionGlobal.div
+                  key={photo.id}
+                  className="absolute"
+                  style={{
+                    width: 155,
+                    height: 185,
+                    zIndex: style.zIndex,
+                    pointerEvents: style.pointerEvents,
+                  }}
+                  animate={{
+                    x: style.x,
+                    scale: style.scale,
+                    opacity: style.opacity,
+                    filter: style.filter,
+                  }}
+                  transition={{ type: "spring", stiffness: 320, damping: 26 }}
+                >
+                  <div className="relative h-full w-full overflow-hidden rounded-[2rem] shadow-xl border border-white/10 bg-zinc-900 select-none">
+                    <img
+                      src={photo.src}
+                      alt="Gallery photo"
+                      className="rounded-[2rem] object-cover absolute inset-0 w-full h-full cursor-pointer select-none"
+                      onClick={() => setActivePhoto(photo.src)}
+                      draggable={false}
+                    />
+                  </div>
+                </motionGlobal.div>
+              );
+            })}
+          </motionGlobal.div>
+
+          {/* Mobile Navigation Buttons */}
+          <div className="mt-6 flex items-center justify-center gap-4">
+            <motionGlobal.button
+              whileTap={{ scale: 0.9 }}
+              onClick={handlePrev}
+              className="liquid-glass flex h-11 w-11 items-center justify-center rounded-full text-white/70 border border-white/10 hover:text-white transition-all duration-200 cursor-pointer shadow-[0_0_15px_rgba(139,92,246,0.1)] active:shadow-[0_0_20px_rgba(0,240,255,0.3)] min-h-[44px]"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="h-4 w-4">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+              </svg>
+            </motionGlobal.button>
+            <motionGlobal.button
+              whileTap={{ scale: 0.9 }}
+              onClick={handleNext}
+              className="liquid-glass flex h-11 w-11 items-center justify-center rounded-full text-white/70 border border-white/10 hover:text-white transition-all duration-200 cursor-pointer shadow-[0_0_15px_rgba(139,92,246,0.1)] active:shadow-[0_0_20px_rgba(0,240,255,0.3)] min-h-[44px]"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="h-4 w-4">
+                <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+              </svg>
+            </motionGlobal.button>
           </div>
-        </motionGlobal.div>
-      </div>
+        </div>
+      ) : (
+        /* Desktop Fanned Layout */
+        <div className="relative mb-8 h-[350px] w-full items-center justify-center lg:flex">
+          <motionGlobal.div
+            className="relative mx-auto flex w-full max-w-7xl justify-center"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+          >
+            <div className="relative" style={{ width: 220, height: 220 }}>
+              {/* Render photos in reverse order so that higher z-index photos are rendered later in the DOM */}
+              {[...photos].reverse().map((photo) => (
+                <motionGlobal.div
+                  key={photo.id}
+                  className="absolute left-0 top-0"
+                  style={{ zIndex: photo.zIndex }}
+                  variants={photoVariants}
+                  custom={{
+                    x: photo.x,
+                    y: photo.y,
+                    order: photo.order,
+                  }}
+                  whileHover={{ zIndex: 9999 }}
+                  whileTap={{ zIndex: 9999 }}
+                >
+                  <Photo
+                    width={220}
+                    height={220}
+                    src={photo.src}
+                    alt="Gallery photo"
+                    direction={photo.direction}
+                    onClick={() => setActivePhoto(photo.src)}
+                  />
+                </motionGlobal.div>
+              ))}
+            </div>
+          </motionGlobal.div>
+        </div>
+      )}
+
       <div className="flex w-full justify-center mt-6">
         <button className="flex items-center gap-2 rounded-full bg-rose-500 hover:bg-rose-600 px-6 py-2.5 font-body text-sm font-medium text-white transition-colors duration-200 min-h-[44px]">
           View All Stories <ArrowUpRight className="h-4 w-4" />
