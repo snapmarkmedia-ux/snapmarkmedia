@@ -178,13 +178,24 @@ function Photo({
 }
 
 function GallerySection() {
-  // Photo positions - horizontal layout with random y offsets
+  const [isMobile, setIsMobile] = React.useState(false);
+
+  React.useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Photo positions - horizontal layout with random y offsets (responsive values)
   const photos = [
     {
       id: 1,
       order: 0,
-      x: "-320px",
-      y: "15px",
+      x: isMobile ? "-90px" : "-320px",
+      y: isMobile ? "0px" : "15px",
       zIndex: 50, // Highest z-index (on top)
       direction: "left",
       src: "assets/gallery-1.jpg",
@@ -192,8 +203,8 @@ function GallerySection() {
     {
       id: 2,
       order: 1,
-      x: "-160px",
-      y: "32px",
+      x: isMobile ? "-45px" : "-160px",
+      y: isMobile ? "10px" : "32px",
       zIndex: 40,
       direction: "left",
       src: "assets/gallery-2.jpg",
@@ -202,7 +213,7 @@ function GallerySection() {
       id: 3,
       order: 2,
       x: "0px",
-      y: "8px",
+      y: isMobile ? "20px" : "8px",
       zIndex: 30,
       direction: "right",
       src: "assets/gallery-3.png",
@@ -210,8 +221,8 @@ function GallerySection() {
     {
       id: 4,
       order: 3,
-      x: "160px",
-      y: "22px",
+      x: isMobile ? "45px" : "160px",
+      y: isMobile ? "10px" : "22px",
       zIndex: 20,
       direction: "right",
       src: "assets/gallery-4.png",
@@ -219,8 +230,8 @@ function GallerySection() {
     {
       id: 5,
       order: 4,
-      x: "320px",
-      y: "44px",
+      x: isMobile ? "90px" : "320px",
+      y: isMobile ? "0px" : "44px",
       zIndex: 10, // Lowest z-index (at bottom)
       direction: "left",
       src: "assets/gallery-5.png",
@@ -253,23 +264,25 @@ function GallerySection() {
   const { motion: motionGlobal, AnimatePresence } = Motion;
   const [activePhoto, setActivePhoto] = React.useState(null);
 
+  const cardSize = isMobile ? 140 : 220;
+
   return (
-    <section id="gallery" className="relative min-h-screen px-8 pb-16 pt-28 md:px-16 lg:px-20 overflow-hidden flex flex-col justify-center items-center">
+    <section id="gallery" className="relative min-h-screen px-4 pb-16 pt-28 md:px-16 lg:px-20 overflow-hidden flex flex-col justify-center items-center">
       <div className="absolute inset-0 max-md:hidden top-[200px] -z-10 h-[300px] w-full bg-transparent bg-[linear-gradient(to_right,#57534e_1px,transparent_1px),linear-gradient(to_bottom,#57534e_1px,transparent_1px)] bg-[size:3rem_3rem] opacity-20 [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]"></div>
       <p className="lg:text-md my-2 text-center text-xs font-light uppercase tracking-widest text-slate-400 font-body">
         A Journey Through Visual Stories
       </p>
-      <h3 className="z-20 mx-auto max-w-2xl justify-center text-center text-4xl font-heading italic text-white md:text-7xl mb-8">
+      <h3 className="z-20 mx-auto max-w-2xl justify-center text-center text-3xl sm:text-4xl md:text-7xl font-heading italic text-white mb-8">
         Featured <span className="text-rose-500"> Work</span>
       </h3>
-      <div className="relative mb-8 h-[350px] w-full items-center justify-center lg:flex">
+      <div className="relative mb-8 h-[240px] sm:h-[350px] w-full items-center justify-center lg:flex">
         <motionGlobal.div
           className="relative mx-auto flex w-full max-w-7xl justify-center"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
         >
-          <div className="relative h-[220px] w-[220px]">
+          <div className="relative" style={{ width: cardSize, height: cardSize }}>
             {/* Render photos in reverse order so that higher z-index photos are rendered later in the DOM */}
             {[...photos].reverse().map((photo) => (
               <motionGlobal.div
@@ -286,8 +299,8 @@ function GallerySection() {
                 whileTap={{ zIndex: 9999 }}
               >
                 <Photo
-                  width={220}
-                  height={220}
+                  width={cardSize}
+                  height={cardSize}
                   src={photo.src}
                   alt="Gallery photo"
                   direction={photo.direction}
@@ -298,8 +311,8 @@ function GallerySection() {
           </div>
         </motionGlobal.div>
       </div>
-      <div className="flex w-full justify-center">
-        <button className="flex items-center gap-2 rounded-full bg-rose-500 hover:bg-rose-600 px-6 py-2.5 font-body text-sm font-medium text-white transition-colors duration-200">
+      <div className="flex w-full justify-center mt-6">
+        <button className="flex items-center gap-2 rounded-full bg-rose-500 hover:bg-rose-600 px-6 py-2.5 font-body text-sm font-medium text-white transition-colors duration-200 min-h-[44px]">
           View All Stories <ArrowUpRight className="h-4 w-4" />
         </button>
       </div>
