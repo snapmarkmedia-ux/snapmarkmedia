@@ -62,15 +62,79 @@ serve(async (req) => {
       }
     }
 
-    // Step 3: Send professional email notification using Resend
-    let emailSent = true
+    // Step 3: Send Emails
+    
+    // Email 1: Customer Confirmation Email (Existing/Preserved concept)
+    let customerEmailSent = true
+    try {
+      const customerEmailResponse = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${resendApiKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          from: 'Snapmark Media <onboarding@resend.dev>',
+          to: email,
+          subject: 'Thank you for contacting SnapMark Media!',
+          html: `
+            <!DOCTYPE html>
+            <html>
+            <head>
+              <meta charset="utf-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>Thank You</title>
+            </head>
+            <body style="font-family: Arial, Helvetica, sans-serif; background-color: #F5F7FB; margin: 0; padding: 40px 10px; -webkit-font-smoothing: antialiased;">
+              <table cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color: #F5F7FB; width: 100%;">
+                <tr>
+                  <td align="center" style="padding: 10px 0;">
+                    <table cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width: 600px; background-color: #ffffff; border-radius: 16px; box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05); overflow: hidden; border-collapse: separate; padding: 40px 30px; border: 1px solid #E2E8F0;">
+                      <tr>
+                        <td>
+                          <h2 style="margin: 0 0 16px 0; font-family: Arial, Helvetica, sans-serif; font-size: 24px; font-weight: 700; color: #2563EB;">Thank You for Reaching Out!</h2>
+                          <p style="margin: 0 0 16px 0; font-size: 16px; color: #0F172A; line-height: 1.5;">Hi ${full_name},</p>
+                          <p style="margin: 0 0 24px 0; font-size: 16px; color: #475569; line-height: 1.5;">We have successfully received your enquiry for <strong>${service || 'our creative services'}</strong>. Our team is already reviewing your project details, and we will get back to you within 24 hours.</p>
+                          
+                          <div style="background-color: #F8FAFC; border-left: 4px solid #2563EB; border-radius: 4px; padding: 16px; margin-bottom: 24px; font-style: italic; color: #334155; font-size: 15px; line-height: 1.5; white-space: pre-wrap;">"${message}"</div>
+                          
+                          <p style="margin: 0 0 32px 0; font-size: 16px; color: #475569; line-height: 1.5;">In the meantime, feel free to explore our portfolio on our website.</p>
+                          
+                          <div style="border-top: 1px solid #E2E8F0; padding-top: 24px; font-size: 13px; color: #64748B; line-height: 1.5;">
+                            Best regards,<br>
+                            <strong>SnapMark Media Team</strong><br>
+                            <a href="https://snapmarkmedia.com" style="color: #2563EB; text-decoration: none; font-weight: 600;">snapmarkmedia.com</a>
+                          </div>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </body>
+            </html>
+          `
+        })
+      })
+
+      if (!customerEmailResponse.ok) {
+        const errorText = await customerEmailResponse.text()
+        throw new Error(`Resend customer email failed: ${errorText}`)
+      }
+    } catch (customerEmailError) {
+      console.error('Customer confirmation email failed to send:', customerEmailError)
+      customerEmailSent = false
+    }
+
+    // Email 2: Owner Notification Email (New)
+    let ownerEmailSent = true
     try {
       const adminEmail = Deno.env.get('ADMIN_EMAIL') || 'snapmarkmedia@gmail.com'
       const submissionDate = created_at 
         ? new Date(created_at).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' })
         : new Date().toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' })
 
-      const emailResponse = await fetch('https://api.resend.com/emails', {
+      const ownerEmailResponse = await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${resendApiKey}`,
@@ -79,7 +143,7 @@ serve(async (req) => {
         body: JSON.stringify({
           from: 'Snapmark Media Contact <onboarding@resend.dev>',
           to: adminEmail,
-          subject: `New Enquiry from ${full_name}`,
+          subject: `🚀 New Lead • ${full_name} • ${service || 'General Enquiry'}`,
           html: `
             <!DOCTYPE html>
             <html>
@@ -179,18 +243,18 @@ serve(async (req) => {
         })
       })
 
-      if (!emailResponse.ok) {
-        const errorText = await emailResponse.text()
-        throw new Error(`Resend API request failed: ${errorText}`)
+      if (!ownerEmailResponse.ok) {
+        const errorText = await ownerEmailResponse.text()
+        throw new Error(`Resend owner notification failed: ${errorText}`)
       }
-    } catch (emailError) {
-      console.error('Email notification failed to send:', emailError)
-      emailSent = false
+    } catch (ownerEmailError) {
+      console.error('Owner notification email failed to send:', ownerEmailError)
+      ownerEmailSent = false
     }
 
     // Step 4: Return JSON response
     return new Response(
-      JSON.stringify(emailSent ? { success: true } : { success: true, emailSent: false }),
+      JSON.stringify(customerEmailSent ? { success: true } : { success: true, emailSent: false }),
       { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
 
