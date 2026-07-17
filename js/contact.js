@@ -12,22 +12,23 @@ window.submitContactForm = async function(formData) {
     throw new Error('Supabase configuration missing.');
   }
 
-  // Construct the Edge Function endpoint for send-contact-email
-  const endpoint = `${supabaseUrl}/functions/v1/send-contact-email`;
+  // Construct the direct REST API endpoint for the contact_submissions table
+  const endpoint = `${supabaseUrl}/rest/v1/contact_submissions`;
 
   const response = await fetch(endpoint, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
       'apikey': supabaseAnonKey,
-      'Authorization': `Bearer ${supabaseAnonKey}`
+      'Content-Type': 'application/json',
+      'Prefer': 'return=minimal'
     },
     body: JSON.stringify({
       full_name: formData.fullName,
       email: formData.email,
       phone: formData.phone || null,
       service: formData.service || null,
-      message: formData.message
+      message: formData.message,
+      status: 'new'
     })
   });
 
