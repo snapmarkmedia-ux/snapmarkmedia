@@ -48,7 +48,6 @@ function MobileHero({ parallax, setMobileModalIndex, setViewWorkPersist }) {
 
   return (
     <div className="flex lg:hidden flex-col w-full min-h-screen relative z-10 pt-[10vh] overflow-hidden">
-      <Navbar />
       
       <div className="absolute inset-0 z-0 pointer-events-none">
         <AmbientEffects parallax={parallax} />
@@ -296,7 +295,7 @@ function CinematicHero() {
       >
         {/* ── Sticky viewport ──────────────────────────────── */}
         <div className="sticky top-0 z-10 flex h-screen w-full flex-col overflow-hidden bg-transparent">
-          <Navbar />
+          
 
           {/* ambient */}
           <div className="absolute inset-0 z-0">
