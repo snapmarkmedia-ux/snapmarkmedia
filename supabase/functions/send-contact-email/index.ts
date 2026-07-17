@@ -23,7 +23,12 @@ serve(async (req) => {
 
     // Parse the request body
     const body = await req.json()
-    const { full_name, email, phone, service, message } = body
+    
+    // Check if it is a database webhook trigger
+    const isWebhook = body.type === 'INSERT' && body.table === 'contact_submissions'
+    
+    const record = isWebhook ? body.record : body
+    const { full_name, email, phone, service, message, created_at } = record
 
     // Step 1: Input Validation
     if (!full_name || !email || !message) {
@@ -33,33 +38,38 @@ serve(async (req) => {
       )
     }
 
-    // Step 2: Insert into database using the server-side client
-    const { data: dbData, error: dbError } = await supabase
-      .from('contact_submissions')
-      .insert([
-        {
-          full_name,
-          email,
-          phone: phone || null,
-          service: service || null,
-          message,
-          status: 'new'
-        }
-      ])
-      .select()
+    // Step 2: Insert into database only if NOT called from webhook
+    if (!isWebhook) {
+      const { error: dbError } = await supabase
+        .from('contact_submissions')
+        .insert([
+          {
+            full_name,
+            email,
+            phone: phone || null,
+            service: service || null,
+            message,
+            status: 'new'
+          }
+        ])
 
-    if (dbError) {
-      console.error('Database insertion error:', dbError)
-      return new Response(
-        JSON.stringify({ error: `Database submission failed: ${dbError.message}` }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+      if (dbError) {
+        console.error('Database insertion error:', dbError)
+        return new Response(
+          JSON.stringify({ error: `Database submission failed: ${dbError.message}` }),
+          { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        )
+      }
     }
 
     // Step 3: Send professional email notification using Resend
     let emailSent = true
     try {
       const adminEmail = Deno.env.get('ADMIN_EMAIL') || 'snapmarkmedia@gmail.com'
+      const submissionDate = created_at 
+        ? new Date(created_at).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' })
+        : new Date().toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' })
+
       const emailResponse = await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: {
@@ -84,7 +94,7 @@ serve(async (req) => {
                 .label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.4); margin-bottom: 6px; font-weight: 600; }
                 .value { font-size: 15px; color: #fff; line-height: 1.5; }
                 .message-box { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 16px; font-style: italic; white-space: pre-wrap; color: rgba(255,255,255,0.9); }
-                .footer { margin-top: 40px; border-t: 1px solid rgba(255,255,255,0.1); pt: 20px; font-size: 11px; text-align: center; color: rgba(255,255,255,0.3); letter-spacing: 0.5px; }
+                .footer { margin-top: 40px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; font-size: 11px; text-align: center; color: rgba(255,255,255,0.3); letter-spacing: 0.5px; }
               </style>
             </head>
             <body>
@@ -109,6 +119,11 @@ serve(async (req) => {
                 <div class="field">
                   <div class="label">Service Required</div>
                   <div class="value" style="color: #d8b4fe; font-weight: 500;">${service || 'General Enquiry'}</div>
+                </div>
+
+                <div class="field">
+                  <div class="label">Submission Date & Time</div>
+                  <div class="value" style="color: #93c5fd;">${submissionDate}</div>
                 </div>
                 
                 <div class="field">
